@@ -67,7 +67,7 @@ class BopPlay extends MusicBeatState
         FlxG.sound.list.add(penthosChant);
         penthosChant.play();
         penthosChant.volume = 0;
-        FlxG.signals.preStateSwitch.addOnce(()->{if (FlxG.sound.music != null && !FlxG.sound.music.playing) FlxG.sound.music.resume();penthosChant.fadeTween?.cancel();});
+        FlxG.signals.preStateSwitch.addOnce(()->{if (FlxG.sound.music != null && !FlxG.sound.music.playing) FlxG.sound.music.resume();penthosChant.fadeTween.cancel();});
 
 
 
@@ -172,7 +172,7 @@ class BopPlay extends MusicBeatState
         }
 
         FlxTween.cancelTweensOf(songTxt);
-        penthosChant.fadeTween?.cancel();
+        penthosChant.fadeTween.cancel();
 
         var isPenthos = songs[curSel].SN == 'yo';
         if (isPenthos) {

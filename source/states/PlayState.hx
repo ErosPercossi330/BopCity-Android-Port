@@ -2377,7 +2377,7 @@ class PlayState extends MusicBeatState
 			case "Cenat Health Drain":
 				{
 					//horribly coded blame daniel not me
-					if (cenatGhoul == null || cenatDrainTween?.active) return;
+					if (cenatGhoul == null || cenatDrainTween.active) return;
 					cenatGhoul.setPosition(healthBar.x + healthBar.width + 100,healthBar.y - 120);
 					cenatGhoul.visible = true;
 					disableHealthGain = true;
