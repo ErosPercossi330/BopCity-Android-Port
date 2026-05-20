@@ -1,0 +1,26 @@
+name: Build Psych Engine for iOS
+
+on: workflow_dispatch
+
+jobs:
+  Build:
+    name: ${{ matrix.name }}
+    strategy:
+      matrix:
+        include:
+          - name: iOS-Sim
+            os: macos-13
+            buildArgs: "ios -simulator -nosign"
+            setupCommand: sh ./setup/unix.sh
+            artifactName: iOSSimBuild
+            artifactPath: "export/release/ios/build/Release-iphonesimulator/*.ipa"
+            system: iOS-Sim
+    uses: ./.github/workflows/build.yml
+    with:
+        name: ${{ matrix.name }}
+        os: ${{ matrix.os }}
+        buildArgs: ${{ matrix.buildArgs }}
+        setupCommand: ${{ matrix.setupCommand }}
+        artifactName: ${{ matrix.artifactName }}
+        artifactPath: ${{ matrix.artifactPath }}
+        system: ${{ matrix.system }}

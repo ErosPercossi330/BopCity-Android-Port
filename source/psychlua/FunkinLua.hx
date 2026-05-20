@@ -41,6 +41,10 @@ import psychlua.ModchartSprite;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
 
+#if mobile
+import mobile.psychlua.Functions;
+#end
+
 import haxe.Json;
 
 class FunkinLua {
@@ -52,6 +56,13 @@ class FunkinLua {
 
 	#if HSCRIPT_ALLOWED
 	public var hscript:HScript = null;
+	#end
+
+	#if TOUCH_CONTROLS
+	public var extra1:String = ClientPrefs.extraKeyReturn1.toUpperCase();
+	public var extra2:String = ClientPrefs.extraKeyReturn2.toUpperCase();
+	public var extra3:String = ClientPrefs.extraKeyReturn3.toUpperCase();
+	public var extra4:String = ClientPrefs.extraKeyReturn4.toUpperCase();
 	#end
 
 	public var callbacks:Map<String, Dynamic> = new Map<String, Dynamic>();
@@ -1699,6 +1710,12 @@ class FunkinLua {
 
 	#if (MODS_ALLOWED && !flash && sys)
 	public var runtimeShaders:Map<String, Array<String>> = new Map<String, Array<String>>();
+	#end
+
+	#if TOUCH_CONTROLS
+	public static function varCheck(className:Dynamic, variable:String):String{
+		return variable;
+	}
 	#end
 
 	public function initLuaShader(name:String, ?glslVersion:Int = 120)

@@ -2,6 +2,9 @@ package psychlua;
 
 import Type.ValueType;
 import haxe.Constraints;
+#if mobile
+import mobile.psychlua.Functions;
+#end
 
 import substates.GameOverSubstate;
 
@@ -32,6 +35,18 @@ class ReflectionFunctions
 			return true;
 		});
 		Lua_helper.add_callback(lua, "getPropertyFromClass", function(classVar:String, variable:String, ?allowMaps:Bool = false) {
+			@:privateAccess
+			#if TOUCH_CONTROLS
+			var variableplus:String = varCheck(myClass, variable);
+			#end
+			var killMe:Array<String> = variable.split('.');
+			#if TOUCH_CONTROLS
+			if (MusicBeatState.mobilec != null && myClass == 'flixel.FlxG' && variableplus.indexOf('key') != -1){
+				var check:Dynamic;
+				check = specialKeyCheck(variableplus); //fuck you old lua 🙃
+				if (check != null) return check;
+			}
+			#end
 			var myClass:Dynamic = Type.resolveClass(classVar);
 			if(myClass == null)
 			{
@@ -238,4 +253,9 @@ class ReflectionFunctions
 		//trace('end: $obj');
 		return funcToRun != null ? Reflect.callMethod(obj, funcToRun, args) : null;
 	}
+	#if TOUCH_CONTROLS
+	public static function varCheck(className:Dynamic, variable:String):String{
+		return variable;
+	}
+	#end
 }

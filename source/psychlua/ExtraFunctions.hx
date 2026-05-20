@@ -3,6 +3,10 @@ package psychlua;
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
 
+#if mobile
+import mobile.psychlua.Functions;
+#end
+
 //
 // Things to trivialize some dumb stuff like splitting strings on older Lua
 //
@@ -60,6 +64,12 @@ class ExtraFunctions
 
 		Lua_helper.add_callback(lua, "keyJustPressed", function(name:String = '') {
 			name = name.toLowerCase();
+			#if TOUCH_CONTROLS
+			var check:Dynamic;
+			check = specialKeyCheckForOthers(name, "released");
+			if (check != null) return check;
+			#end
+			var key:Bool = false;
 			switch(name) {
 				case 'left': return PlayState.instance.controls.NOTE_LEFT_P;
 				case 'down': return PlayState.instance.controls.NOTE_DOWN_P;
@@ -71,6 +81,12 @@ class ExtraFunctions
 		});
 		Lua_helper.add_callback(lua, "keyPressed", function(name:String = '') {
 			name = name.toLowerCase();
+			#if TOUCH_CONTROLS
+			var check:Dynamic;
+			check = specialKeyCheckForOthers(name, "released");
+			if (check != null) return check;
+			#end
+			var key:Bool = false;
 			switch(name) {
 				case 'left': return PlayState.instance.controls.NOTE_LEFT;
 				case 'down': return PlayState.instance.controls.NOTE_DOWN;
@@ -82,6 +98,12 @@ class ExtraFunctions
 		});
 		Lua_helper.add_callback(lua, "keyReleased", function(name:String = '') {
 			name = name.toLowerCase();
+			#if TOUCH_CONTROLS
+			var check:Dynamic;
+			check = specialKeyCheckForOthers(name, "released");
+			if (check != null) return check;
+			#end
+			var key:Bool = false;
 			switch(name) {
 				case 'left': return PlayState.instance.controls.NOTE_LEFT_R;
 				case 'down': return PlayState.instance.controls.NOTE_DOWN_R;
@@ -261,5 +283,10 @@ class ExtraFunctions
 		Lua_helper.add_callback(lua, "getRandomBool", function(chance:Float = 50) {
 			return FlxG.random.bool(chance);
 		});
+		#if TOUCH_CONTROLS
+		public static function varCheck(className:Dynamic, variable:String):String{
+			return variable;
+		}
+		#end
 	}
 }
