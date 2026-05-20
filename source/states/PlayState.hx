@@ -1785,7 +1785,7 @@ class PlayState extends MusicBeatState
 
 
 		
-		if (cenatDrainTween != null && cenatDrainTween?.active && cenatGhoul != null)
+		if (cenatDrainTween != null && cenatDrainTween.active && cenatGhoul != null)
 			{
 				cenatGhoul.x = healthBar.barCenter - 30;
 				
