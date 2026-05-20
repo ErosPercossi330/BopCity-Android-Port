@@ -39,12 +39,14 @@
     {
       "name": "hxvlc",
       "type": "haxelib",
-      "version": "1.6.1"
+      "version": null
     },
     {
       "name": "SScript",
-      "type": "haxelib",
-      "version": "7.7.0"
+      "type": "git",
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/HomuHomu833/SScript"
     },
     {
       "name": "hxcpp-debug-server",
