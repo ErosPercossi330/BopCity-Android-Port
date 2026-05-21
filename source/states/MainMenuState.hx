@@ -179,7 +179,7 @@ class MainMenuState extends MusicBeatState
             
                     var video = new VideoSprite();
                     video.alpha = 0;
-                    video.addCallback(ONFORMAT,()->{
+                    video.bitmap.onFormatSetup.add(()->{
                         video.alpha = 0;
                         video.setGraphicSize(og.width,og.height);
                         video.updateHitbox();
@@ -239,12 +239,16 @@ class MenuSrp extends FlxSprite {
     public function initFatVideo(delay:Float = 0) {
 
         var video = new VideoSprite();
-        video.addCallback(ONFORMAT,()->{
-            video.alpha = 0;
-            video.setGraphicSize(width,height);
-            video.updateHitbox();
-            FlxTween.tween(video, {alpha: 1},1);
-
+        var og = {
+        width: video.bitmap.videoWidth,
+        height: video.bitmap.videoHeight
+        };
+        video.alpha = 0;
+        video.bitmap.onFormatSetup.add(()->{
+        video.alpha = 0;
+        video.setGraphicSize(og.width,og.height);
+        video.updateHitbox();
+        FlxTween.tween(video, {alpha: 1},1);
         });
         //add(video);
         video.load('fat.mp4');
