@@ -158,7 +158,7 @@ class Main extends Sprite
 
 		hummusCheck();
 
-		VideoSprite.init();
+		//VideoSprite.init();
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {
 		     if (FlxG.cameras != null) {
