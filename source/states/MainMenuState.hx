@@ -3,6 +3,7 @@ package states;
 import flixel.group.FlxSpriteContainer.FlxTypedSpriteContainer;
 import objects.VideoSprite;
 import backend.InputFormatter;
+import flixel.input.actions.FlxActionInput;
 import flixel.input.mouse.FlxMouseEvent;
 import flixel.FlxObject;
 import flixel.addons.transition.FlxTransitionableState;
