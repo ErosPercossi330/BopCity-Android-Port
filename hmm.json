@@ -24,7 +24,7 @@
     {
       "name": "flixel-ui",
       "type": "haxelib",
-      "version": "2.6.4"
+      "version": "2.6.1"
     },
     {
       "name": "hxcpp",
