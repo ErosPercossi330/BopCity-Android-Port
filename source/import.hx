@@ -93,6 +93,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
+import flixel.input.actions.FlxActionInput;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
 using StringTools;
