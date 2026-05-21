@@ -1,174 +1,208 @@
-package objects;
+package;
 
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.FlxCamera;
+import flixel.util.FlxDestroyUtil;
+import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
+import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.group.FlxSpriteGroup;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.addons.display.FlxPieDial;
+import backend.Controls;
+import mobile.backend.StorageUtil;
 
-import openfl.Assets;
-import haxe.io.Bytes;
+#if hxvlc
 import hxvlc.flixel.FlxVideoSprite;
+#end
 
-//add a static method to cache a vid 
-class VideoSprite extends FlxVideoSprite
-{
-    static var _init:Bool = false;
-    public static function init() {
-        if (_init) return;
-        _init = true;
-        trace('handle init? ' + hxvlc.util.Handle.init());
+class VideoSprite extends FlxSpriteGroup {
+	#if VIDEOS_ALLOWED
+	public var bitmap(get, never):Dynamic;
+	private function get_bitmap() return videoSprite.bitmap;
+	public function load(name:String, ?options:Dynamic) {
+        #if hxvlc
+        var path:String = StorageUtil.getStorageDirectory() + 'assets/videos/' + name + '.mp4';
+        videoSprite.load(path, options);
+        #end
     }
+	public var finishCallback:Dynamic = null;
+	public var onSkip:Void->Void = null;
 
-    public static final looping:String = ':input-repeat=65535';
-    public static final muted:String = ':no-audio';
-    
-    public function new(x:Float = 0,y:Float = 0,destroyOnUse:Bool = true,dontAdd:Bool = false) {
-        super(x,y);
+	final _timeToSkip:Float = 1;
+	public var holdingTime:Float = 0;
+	public var videoSprite:FlxVideoSprite;
+	public var skipSprite:FlxPieDial;
+	public var cover:FlxSprite;
+	public var canSkip(default, set):Bool = false;
 
-        if (destroyOnUse) bitmap.onEndReached.add(()->{this.destroy();},true);
+	private var videoName:String;
 
-        if (!dontAdd)
-            tryAddingToPlayState();
-    }
+	public var waiting:Bool = false;
 
-    function tryAddingToPlayState() {
-        if (Std.isOfType(FlxG.state,PlayState) && PlayState.instance != null) {
-            var cur:PlayState = cast FlxG.state;
-            cur.onPauseSignal.add(this.pause);
-            cur.onResumeSignal.add(this.resume);
-        }
-    }
-
-    //this was gonna be more elaborate but i decided not to
-    function decipherLocation(local:Location) 
-    {
+	public function new(videoName:String = '', isWaiting:Bool = false, canSkip:Bool = false, shouldLoop:Dynamic = false) {
+        super();
+        this.videoName = videoName;
+        scrollFactor.set();
         
-		if (local != null && !(local is Int) && !(local is Bytes) && (local is String)) {
-            var local:String = cast(local,String);
+        if (FlxG.cameras.list.length > 0)
+            cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
-            var modPath:String = Paths.modFolders('videos/$local');
-            var assetPath:String = 'assets/videos/$local';
-
-
-
-            //found bytes. return em
-            if (Assets.exists(modPath,BINARY)) return cast Assets.getBytes(modPath);
-            else if (Assets.exists(assetPath,BINARY)) return cast Assets.getBytes(assetPath);
-
-            if (FileSystem.exists(modPath)) return cast modPath;
-            else if (FileSystem.exists(assetPath)) return cast assetPath;
-            
-        }
-    
-        return local;
-    }
-
-    
-    override function load(location:Location, ?options:Array<String>):Bool {
-        
-		if (bitmap == null)
-			return false;
-
-        if (autoPause) 
-        {
-            if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
-            if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
-        }
-
-        final realLocal = decipherLocation(location);
-
-        
-
-		if (realLocal != null && !(realLocal is Int) && !(realLocal is Bytes) && (realLocal is String))
+        waiting = isWaiting;
+		if(!waiting)
 		{
-			final realLocal:String = cast(realLocal, String);
-
-			if (!realLocal.contains('://'))
-			{
-				final absolutePath:String = FileSystem.absolutePath(realLocal);
-
-				if (FileSystem.exists(absolutePath))
-					return bitmap.load(absolutePath, options);
-				else
-				{
-					FlxG.log.warn('Unable to find the video file at location "$absolutePath".');
-
-					return false;
-				}
-			}
+			cover = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
+			cover.scale.set(FlxG.width + 100, FlxG.height + 100);
+			cover.screenCenter();
+			cover.scrollFactor.set();
+			add(cover);
 		}
 
-		return bitmap.load(realLocal, options);
-    }
+		// initialize sprites
+		videoSprite = new FlxVideoSprite();
+        
+        #if (psychEngineVersion >= "0.7.0")
+        videoSprite.antialiasing = ClientPrefs.data.antialiasing;
+        #else
+        videoSprite.antialiasing = true; 
+        #end
+        
+        add(videoSprite);
+        if(canSkip) this.canSkip = true;
 
-    override function pause() {
-        super.pause();
+        #if hxvlc
+        videoSprite.bitmap.onEndReached.add(finishVideo);
 
-        if (autoPause) 
+        videoSprite.bitmap.onFormatSetup.add(function()
         {
-            if (FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.remove(bitmap.resume);
-            if (FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.remove(bitmap.pause);
-        }
-    }
+            videoSprite.setGraphicSize(FlxG.width);
+            videoSprite.updateHitbox();
+            videoSprite.screenCenter();
+        });
+        var path:String = StorageUtil.getStorageDirectory() + 'assets/videos/' + videoName + '.mp4'; // Standard pathing
+        videoSprite.load(path, shouldLoop ? ['input-repeat=65545'] : null);
+        #end
+        
+        if(!waiting)
+            videoSprite.play();
+	}
 
-    override function resume() {
-        super.resume();
-        if (autoPause) 
-        {
-            if (!FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.add(bitmap.resume);
-            if (!FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.add(bitmap.pause);
-        }
-    }
+	var alreadyDestroyed:Bool = false;
+	override function destroy()
+	{
+		if(alreadyDestroyed)
+			return;
 
-    public function addCallback(vidCallBack:VidCallbacks,func:Void->Void,once:Bool = false) {
-        switch (vidCallBack) {
-            case ONEND:
-                if (func != null) bitmap.onEndReached.add(func,once);
-            case ONSTART:
-                if (func != null) bitmap.onOpening.add(func,once);
-            case ONFORMAT:
-                if (func != null) bitmap.onFormatSetup.add(func,once);
-        }
-    }
+		if(cover != null)
+		{
+			remove(cover);
+			cover.destroy();
+		}
+		
+		finishCallback = null;
+		onSkip = null;
 
-    public static function quickGen(data:VideoData) 
-    {
-        var video = new VideoSprite();
-        final isMute = data.muted ? muted : '';
-        final loops = data.loops ? looping : '';
-        video.load(data.file,[isMute,loops]);
-        return video;
-    }
+		if(FlxG.state != null)
+		{
+			if(FlxG.state.members.contains(this))
+				FlxG.state.remove(this);
+		}
+		super.destroy();
+		alreadyDestroyed = true;
+	}
 
-    public static function cacheVid(path:String) {
-        var video = new VideoSprite(0,0,false,true);
-        video.load(path, [muted]);
-        video.addCallback(ONFORMAT,()->{video.destroy();});
-        video.play();
+	function finishVideo()
+	{
+		if (!alreadyDestroyed)
+		{
+			if(finishCallback != null)
+				finishCallback();
+			
+			destroy();
+		}
+	}
 
-    }
+	override function update(elapsed:Float)
+	{
+		if(canSkip)
+		{
+			// FIX 3: Controls.instance vs PlayerSettings
+			var pressedSkip:Bool = false;
+			#if mobile
+			// On iOS/Mobile, usually any touch or a specific button skips
+			pressedSkip = FlxG.touches.list.length > 0 || FlxG.keys.justPressed.ENTER;
+			#else
+			try {
+				pressedSkip = Controls.instance.ACCEPT;
+			} catch(e:Dynamic) {
+				pressedSkip = FlxG.keys.justPressed.ENTER;
+			}
+			#end
 
-    override function destroy() {
-        if (Std.isOfType(FlxG.state,PlayState) && PlayState.instance != null) {
-            var cur:PlayState = cast FlxG.state;
-            if (cur.onPauseSignal.has(this.pause)) cur.onPauseSignal.remove(this.pause);
-            if (cur.onResumeSignal.has(this.resume)) cur.onResumeSignal.remove(this.resume);
-        }
-        if (bitmap != null) {
-            bitmap.stop();
-            
-            if (FlxG.signals.focusGained.has(bitmap.resume)) FlxG.signals.focusGained.remove(bitmap.resume);
-            if (FlxG.signals.focusLost.has(bitmap.pause)) FlxG.signals.focusLost.remove(bitmap.pause);
-        }
+			if(pressedSkip)
+			{
+				holdingTime = Math.max(0, Math.min(_timeToSkip, holdingTime + elapsed));
+			}
+			else if (holdingTime > 0)
+			{
+				holdingTime = Math.max(0, FlxMath.lerp(holdingTime, -0.1, FlxMath.bound(elapsed * 3, 0, 1)));
+			}
+			updateSkipAlpha();
 
-        super.destroy();
-    }
-    
+			if(holdingTime >= _timeToSkip)
+			{
+				if(onSkip != null) onSkip();
+				finishCallback = null;
+				#if hxvlc
+				videoSprite.bitmap.onEndReached.dispatch();
+				#else
+				finishVideo();
+				#end
+				return;
+			}
+		}
+		super.update(elapsed);
+	}
+
+	function set_canSkip(newValue:Bool)
+	{
+		canSkip = newValue;
+		if(canSkip)
+		{
+			if(skipSprite == null)
+			{
+				skipSprite = new FlxPieDial(0, 0, 40, FlxColor.WHITE, 40, true, 24);
+				skipSprite.replaceColor(FlxColor.BLACK, FlxColor.TRANSPARENT);
+				skipSprite.x = FlxG.width - (skipSprite.width + 80);
+				skipSprite.y = FlxG.height - (skipSprite.height + 72);
+				skipSprite.amount = 0;
+				add(skipSprite);
+			}
+		}
+		else if(skipSprite != null)
+		{
+			remove(skipSprite);
+			skipSprite.destroy();
+			skipSprite = null;
+		}
+		return canSkip;
+	}
+
+	function updateSkipAlpha()
+	{
+		if(skipSprite == null) return;
+		skipSprite.amount = Math.min(1, Math.max(0, (holdingTime / _timeToSkip) * 1.025));
+		skipSprite.alpha = FlxMath.remapToRange(skipSprite.amount, 0.025, 1, 0, 1);
+	}
+
+	// Helper methods to ensure compatibility with PlayState calls
+	public function play() { if(videoSprite != null) videoSprite.play(); }
+	public function resume() { if(videoSprite != null) videoSprite.resume(); }
+	public function pause() { if(videoSprite != null) videoSprite.pause(); }
+	#end
 }
-
-
-typedef VideoData = {file:String,loops:Bool,muted:Bool}
-
-enum abstract VidCallbacks(String) to String from String {
-    public var ONEND:String = 'onEnd';
-    public var ONSTART:String = 'onStart';
-    public var ONFORMAT:String = 'onFormat';
-}
-
-typedef Location = #if (hxvlc <= "1.5.5") hxvlc.util.OneOfThree<String, Int, Bytes>; #else hxvlc.util.Location; #end
