@@ -46,14 +46,17 @@ class GriddyGameover extends MusicBeatSubstate
 		instance = this;
 
 		var video = new VideoSprite();
-		video.addCallback(ONFORMAT,()->{
-			video.setGraphicSize(0,FlxG.height);
+
+		video.bitmap.onFormatSetup.add(() -> {
+			video.setGraphicSize(0, FlxG.height);
 			video.updateHitbox();
 			video.screenCenter();
 		});
-		video.addCallback(ONEND,()->{
+
+		video.bitmap.onEndReached.add(() -> {
 			endBullshit();
 		});
+
 		video.load(vidPath);
 		video.play();
 		add(video);
