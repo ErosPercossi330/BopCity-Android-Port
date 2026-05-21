@@ -9,6 +9,19 @@ import states.TitleState;
 // Add a variable here and it will get automatically saved
 @:structInit class SaveVariables {
 	public var downScroll:Bool = false;
+	public var extraKeys:Int = 2;
+    public var hitboxLocation:String = 'Bottom';
+    public var hitboxmode:String = 'New';
+    public var hitboxtype:String = 'Gradient';
+    public var storageType:String = 'EXTERNAL_DATA';
+    public var hitboxhint:Bool = false;
+    public var mobilePadAlpha:Float = 0.6;
+    public var hitboxalpha:Float = 0.7;
+    public var extraKeyReturn1:String = 'SHIFT';
+    public var extraKeyReturn2:String = 'SPACE';
+    public var extraKeyReturn3:String = 'Q';
+    public var extraKeyReturn4:String = 'E';
+	public var wideScreen:Bool = false;
 	public var middleScroll:Bool = false;
 	public var opponentStrums:Bool = true;
 	public var showFPS:Bool = true;
@@ -177,6 +190,34 @@ class ClientPrefs {
 		
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = data.showFPS;
+
+		if(FlxG.save.data.extraKeys != null)
+        	extraKeys = FlxG.save.data.extraKeys;
+        if(FlxG.save.data.hitboxLocation != null)
+        	hitboxLocation = FlxG.save.data.hitboxLocation;
+        if(FlxG.save.data.hitboxhint != null)
+        	hitboxhint = FlxG.save.data.hitboxhint;
+        if(FlxG.save.data.hitboxmode != null)
+        	hitboxmode = FlxG.save.data.hitboxmode;
+        if(FlxG.save.data.hitboxtype != null)
+        	hitboxtype = FlxG.save.data.hitboxtype;
+        if(FlxG.save.data.storageType != null)
+        	storageType = FlxG.save.data.storageType;
+        if(FlxG.save.data.mobilePadAlpha != null)
+        	mobilePadAlpha = FlxG.save.data.mobilePadAlpha;
+        if(FlxG.save.data.hitboxalpha != null)
+        	hitboxalpha = FlxG.save.data.hitboxalpha;
+        if(FlxG.save.data.extraKeyReturn1 != null)
+        	extraKeyReturn1 = FlxG.save.data.extraKeyReturn1;
+        if(FlxG.save.data.extraKeyReturn2 != null)
+        	extraKeyReturn2 = FlxG.save.data.extraKeyReturn2;
+        if(FlxG.save.data.extraKeyReturn3 != null)
+        	extraKeyReturn3 = FlxG.save.data.extraKeyReturn3;
+        if(FlxG.save.data.extraKeyReturn4 != null)
+        	extraKeyReturn4 = FlxG.save.data.extraKeyReturn4;
+		if(FlxG.save.data.wideScreen != null)
+			wideScreen = FlxG.save.data.wideScreen;
+		if(FlxG.save.data.Modpack != null)
 
 		#if (!html5 && !switch)
 		FlxG.autoPause = ClientPrefs.data.autoPause;
