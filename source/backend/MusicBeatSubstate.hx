@@ -1,6 +1,7 @@
 package backend;
 
 import flixel.FlxSubState;
+import flixel.input.actions.FlxActionInput;
 
 class MusicBeatSubstate extends FlxSubState
 {
