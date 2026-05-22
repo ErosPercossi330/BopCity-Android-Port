@@ -3934,4 +3934,72 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
+	#if LUAMPAD_ALLOWED
+	public function makeLuaMobilePad(DPad:String, Action:String)
+	{
+		if(members.contains(luaMobilePad)) return;
+
+		if(!variables.exists("luaMobilePad"))
+			variables.set("luaMobilePad", luaMobilePad);
+
+		luaMobilePad = new MobilePad(DPad, Action);
+		luaMobilePad.alpha = ClientPrefs.mobilePadAlpha;
+	}
+
+	public function addLuaMobilePad() {
+		if(luaMobilePad == null || members.contains(luaMobilePad)) return;
+
+		var target:Dynamic = isDead ? GameOverSubstate.instance : PlayState.instance;
+		target.insert(target.members.length + 1, luaMobilePad);
+	}
+
+	public function addLuaMobilePadCamera()
+	{
+		if(luaMobilePad != null)
+			luaMobilePad.cameras = [luaVpadCam];
+	}
+
+	public function removeLuaMobilePad()
+	{
+		if (luaMobilePad != null) {
+			luaMobilePad.destroy();
+			remove(luaMobilePad);
+			luaMobilePad = null;
+		}
+	}
+
+	public static function checkMPadPress(buttonPostfix:String, type = 'justPressed') {
+		var buttonName = "button" + buttonPostfix;
+		var button = Reflect.getProperty(PlayState.instance.luaMobilePad, buttonName); //Access Spesific LuaMobilePad Button
+		if (button != null) return Reflect.getProperty(button, type);
+		return false;
+	}
+	#end
+
+	#if TOUCH_CONTROLS
+	//I don't need this anymore because Hitboxes can returnable to any keys
+	public static function checkHBoxPress(button:String, type = 'justPressed') {
+		if (MusicBeatState.mobilec.newhbox != null) button = Reflect.getProperty(MusicBeatState.mobilec.newhbox, button);
+		else button = Reflect.getProperty(MusicBeatState.mobilec.hbox, button);
+		if (button != null) return Reflect.getProperty(button, type);
+		return false;
+	}
+
+	//Lua Stuff for Mobile Controls
+	public function reloadControls(?customControllerValue:Int, ?mode:String, ?action:String)
+	{
+		removeMobileControls();
+		addMobileControls(customControllerValue, mode, action);
+		if (customControllerValue <= 3 && customControllerValue >= 0) MusicBeatState.mobilec.alpha = ClientPrefs.mobilePadAlpha;
+	}
+
+	public function addControls(?customControllerValue:Int, ?mode:String, ?action:String)
+	{
+		addMobileControls(customControllerValue, mode, action);
+		if (customControllerValue <= 3 && customControllerValue >= 0) MusicBeatState.mobilec.alpha = ClientPrefs.mobilePadAlpha;
+	}
+
+	public function removeControls()
+		removeMobileControls();
+	#end
 }
