@@ -5,6 +5,7 @@ import flixel.util.FlxSave;
 import mobile.backend.TouchFunctions;
 import mobile.objects.MobileControls.ControlsGroup;
 import mobile.objects.MobileControls.Config;
+import psychlua.FunkinLua;
 import FunkinLua.CustomSubstate;
 #if android
 import android.widget.Toast as AndroidToast;
