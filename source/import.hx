@@ -97,6 +97,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.input.actions.FlxAction;
 import flixel.input.actions.FlxActionInput;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.*;
 
 using StringTools;
