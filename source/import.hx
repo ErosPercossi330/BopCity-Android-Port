@@ -99,6 +99,8 @@ import flixel.input.actions.FlxActionInput;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.*;
+import flixel.FlxState;
+import flixel.FlxSubState;
 
 using StringTools;
 #end
