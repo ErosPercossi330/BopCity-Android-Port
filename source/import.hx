@@ -82,6 +82,7 @@ import flxanimate.*;
 
 //Flixel
 import flixel.sound.FlxSound;
+import flixel.input.FlxInput;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
@@ -96,6 +97,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.input.actions.FlxAction;
 import flixel.input.actions.FlxActionInput;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.*;
 
 using StringTools;
 #end
