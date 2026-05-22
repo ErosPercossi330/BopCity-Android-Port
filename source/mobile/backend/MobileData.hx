@@ -21,16 +21,16 @@ class MobileData
 		save = new FlxSave();
 		save.bind('MobileControls', CoolUtil.getSavePath());
 
-		readDirectory(Paths.getPreloadPath('mobile/MobileButton/DPadModes'), dpadModes);
-		readDirectory(Paths.getPreloadPath('mobile/Hitbox/HitboxModes'), hitboxModes);
-		readDirectory(Paths.getPreloadPath('mobile/MobileButton/ActionModes'), actionModes);
+		readDirectory(Paths.getSharedPath('mobile/MobileButton/DPadModes'), dpadModes);
+		readDirectory(Paths.getSharedPath('mobile/Hitbox/HitboxModes'), hitboxModes);
+		readDirectory(Paths.getSharedPath('mobile/MobileButton/ActionModes'), actionModes);
 		#if MODS_ALLOWED
-		for (folder in directoriesWithFile(Paths.getPreloadPath(), 'mobile/MobileButton/'))
+		for (folder in directoriesWithFile(Paths.getSharedPath(), 'mobile/MobileButton/'))
 		{
 			readDirectory(Path.join([folder, 'DPadModes']), dpadModes);
 			readDirectory(Path.join([folder, 'ActionModes']), actionModes);
 		}
-		for (folder in directoriesWithFile(Paths.getPreloadPath(), 'mobile/Hitbox/'))
+		for (folder in directoriesWithFile(Paths.getSharedPath(), 'mobile/Hitbox/'))
 		{
 			readDirectory(Path.join([folder, 'HitboxModes']), hitboxModes);
 		}
@@ -109,18 +109,18 @@ class MobileData
 		if(mods)
 		{
 			// Global mods first
-			for(mod in Paths.getGlobalMods())
+			for(mod in Mods.getGlobalMods())
 			{
 				var folder:String = Paths.mods(mod + '/' + fileToFind);
 				if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(folder);
 			}
 
 			// Then "PsychEngine/mods/" main folder
-			var folder:String = Paths.mods(fileToFind);
+			var folder:String = Mods.mods(fileToFind);
 			if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(Paths.mods(fileToFind));
 
 			// And lastly, the loaded mod's folder
-			if(Paths.currentModDirectory != null && Paths.currentModDirectory.length > 0)
+			if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
 			{
 				var folder:String = Paths.mods(Paths.currentModDirectory + '/' + fileToFind);
 				if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(folder);
