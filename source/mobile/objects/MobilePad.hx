@@ -106,7 +106,7 @@ class MobilePad extends FlxTypedSpriteGroup<MobileButton> {
 
 		button.immovable = true;
 		button.solid = button.moves = false;
-		button.antialiasing = ClientPrefs.globalAntialiasing;
+		button.antialiasing = ClientPrefs.data.antialiasing;
 		button.tag = Frames.toUpperCase();
 
 		if (ColorS != -1) button.color = ColorS;
