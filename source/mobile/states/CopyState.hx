@@ -13,6 +13,7 @@ import haxe.crypto.Md5;
 import openfl.system.System;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import states.TitleState;
 
 /*
  * Optimized CopyState with Content Validation and RAM Throttling
