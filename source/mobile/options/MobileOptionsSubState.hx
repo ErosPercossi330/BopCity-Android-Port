@@ -12,7 +12,7 @@ import flixel.util.FlxSave;
 import haxe.Json;
 import flixel.input.keyboard.FlxKey;
 import flixel.graphics.FlxGraphic;
-import Controls;
+import backend.Controls;
 import options.BaseOptionsMenu;
 import options.Option;
 import openfl.Lib;
