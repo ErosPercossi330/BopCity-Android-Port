@@ -29,11 +29,11 @@ class Hitbox extends FlxSpriteGroup
 	{
 		super();
 		if (ClientPrefs.data.hitboxhint){
-			hitbox_hint = new FlxSprite(0, (ClientPrefs.hitboxLocation == 'Bottom' && ClientPrefs.extraKeys != 0) ? -150 : 0).loadGraphic(Paths.image('mobile/Hitbox/hitbox_hint'));
+			hitbox_hint = new FlxSprite(0, (ClientPrefs.data.hitboxLocation == 'Bottom' && ClientPrefs.data.extraKeys != 0) ? -150 : 0).loadGraphic(Paths.image('mobile/Hitbox/hitbox_hint'));
 			add(hitbox_hint);
 		}
 		if ((ClientPrefs.data.hitboxmode != 'New' && ClientPrefs.hitboxmode != 'Classic' && CustomMode == null) || CustomMode != null){
-			var Custom:String = CustomMode != null ? CustomMode : ClientPrefs.hitboxmode;
+			var Custom:String = CustomMode != null ? CustomMode : ClientPrefs.data.hitboxmode;
 			if (!MobileData.hitboxModes.exists(Custom))
 				throw 'The Custom Hitbox File doesn\'t exists.';
 
@@ -185,7 +185,7 @@ class Hitbox extends FlxSpriteGroup
 		var guh:Float = ClientPrefs.data.hitboxalpha;
 		var shape:Shape = new Shape();
 		shape.graphics.beginFill(Color);
-		if (ClientPrefs.hitboxtype == "No Gradient")
+		if (ClientPrefs.data.hitboxtype == "No Gradient")
 		{
 			var matrix:Matrix = new Matrix();
 			matrix.createGradientBox(Width, Height, 0, 0, 0);
