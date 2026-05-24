@@ -49,6 +49,8 @@ class MusicBeatState extends FlxUIState
 
 		if (mobilePad != null)
 			remove(mobilePad);
+		
+		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
 	}
 
 	/*
@@ -72,16 +74,16 @@ class MusicBeatState extends FlxUIState
 
 		switch (MobileControls.mode)
 		{
-			case MOBILEPAD_RIGHT | MOBILEPAD_LEFT | MOBILEPAD_CUSTOM:
-				controls.setMobilePadNOTES(mobilec.vpad, "FULL", "NONE");
-				MusicBeatState.checkHitbox = false;
-			case DUO:
-				controls.setMobilePadNOTES(mobilec.vpad, "DUO", "NONE");
-				MusicBeatState.checkHitbox = false;
-			case HITBOX:
-				controls.setHitBox(mobilec.newhbox, mobilec.hbox);
-				MusicBeatState.checkHitbox = true;
-			default:
+		    case MOBILEPAD_RIGHT | MOBILEPAD_LEFT | MOBILEPAD_CUSTOM:
+		        controls.setMobilePadNOTES(mobilec.vpad, "FULL", "NONE", PRESSED);
+		        MusicBeatState.checkHitbox = false;
+		    case DUO:
+		        controls.setMobilePadNOTES(mobilec.vpad, "DUO", "NONE", PRESSED);
+		        MusicBeatState.checkHitbox = false;
+		    case HITBOX:
+		        controls.setHitBox(mobilec.newhbox, mobilec.hbox, PRESSED);
+		        MusicBeatState.checkHitbox = true;
+		    default:
 		}
 
 		trackedinputsNOTES = controls.trackedInputsNOTES.copy();
