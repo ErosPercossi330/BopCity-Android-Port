@@ -59,10 +59,10 @@ class FunkinLua {
 	#end
 
 	#if TOUCH_CONTROLS
-	public var extra1:String = ClientPrefs.extraKeyReturn1.toUpperCase();
-	public var extra2:String = ClientPrefs.extraKeyReturn2.toUpperCase();
-	public var extra3:String = ClientPrefs.extraKeyReturn3.toUpperCase();
-	public var extra4:String = ClientPrefs.extraKeyReturn4.toUpperCase();
+	public var extra1:String = ClientPrefs.data.extraKeyReturn1.toUpperCase();
+	public var extra2:String = ClientPrefs.data.extraKeyReturn2.toUpperCase();
+	public var extra3:String = ClientPrefs.data.extraKeyReturn3.toUpperCase();
+	public var extra4:String = ClientPrefs.data.extraKeyReturn4.toUpperCase();
 	#end
 
 	public var callbacks:Map<String, Dynamic> = new Map<String, Dynamic>();
