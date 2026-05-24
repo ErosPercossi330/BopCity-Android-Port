@@ -122,7 +122,7 @@ class MobileControls extends FlxSpriteGroup {
 			case DUO:
 				initControler(3, CustomMode, CustomAction);
 			case HITBOX:
-				if(ClientPrefs.hitboxmode == 'Classic') initControler(4);
+				if(ClientPrefs.data.hitboxmode == 'Classic') initControler(4);
 				else initControler(5, CustomMode);
 			case KEYBOARD:
 				// nothing
@@ -154,7 +154,7 @@ class MobileControls extends FlxSpriteGroup {
 				add(vpad);
 				vpad = extendConfig.loadcustom(vpad);
 			case 4:
-				hbox = new HitboxOld(0.75, ClientPrefs.globalAntialiasing);
+				hbox = new HitboxOld(0.75, ClientPrefs.data.antialiasing);
 				add(hbox);
 			case 5:
 				if (CustomMode != null || CustomMode != "NONE") newhbox = new Hitbox(CustomMode);
