@@ -37,7 +37,7 @@ class MusicBeatState extends FlxUIState
 		mobilePad = new MobilePad(DPad, Action);
 		add(mobilePad);
 
-		controls.setMobilePadUI(mobilePad, DPad, Action);
+		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
 		trackedinputsUI = controls.trackedInputsUI;
 		controls.trackedInputsUI = [];
 		mobilePad.alpha = ClientPrefs.mobilePadAlpha;
@@ -49,8 +49,6 @@ class MusicBeatState extends FlxUIState
 
 		if (mobilePad != null)
 			remove(mobilePad);
-		
-		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
 	}
 
 	/*
