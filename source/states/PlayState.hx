@@ -3990,13 +3990,13 @@ class PlayState extends MusicBeatState
 	{
 		removeMobileControls();
 		addMobileControls(customControllerValue, mode, action);
-		if (customControllerValue <= 3 && customControllerValue >= 0) MusicBeatState.mobilec.alpha = ClientPrefs.mobilePadAlpha;
+		if (customControllerValue <= 3 && customControllerValue >= 0) MusicBeatState.mobilec.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
 	public function addControls(?customControllerValue:Int, ?mode:String, ?action:String)
 	{
 		addMobileControls(customControllerValue, mode, action);
-		if (customControllerValue <= 3 && customControllerValue >= 0) MusicBeatState.mobilec.alpha = ClientPrefs.mobilePadAlpha;
+		if (customControllerValue <= 3 && customControllerValue >= 0) MusicBeatState.mobilec.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
 	public function removeControls()
