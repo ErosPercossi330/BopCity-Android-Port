@@ -90,47 +90,55 @@ class Controls
 	public var trackedInputsUI:Array<FlxActionInput> = [];
 	public var trackedInputsNOTES:Array<FlxActionInput> = [];
 
-	public function addButtonNOTES(action:FlxActionDigital, button:Dynamic, state:FlxInputState):Void
+	public function addButtonNOTES(actionName:String, button:Dynamic, state:FlxInputState):Void
 	{
+		if (button == null) return;
+		
 		var input:FlxActionInputDigitalIFlxInput = new FlxActionInputDigitalIFlxInput(button, state);
 		trackedInputsNOTES.push(input);
-		action.add(input);
+		var action = digitalActions.get(actionName);
+		if (action != null) action.add(input);
 	}
 
-	public function addButtonUI(action:FlxActionDigital, button:Dynamic, state:FlxInputState):Void
+	public function addButtonUI(actionName:String, button:Dynamic, state:FlxInputState):Void
 	{
-		if (button == null)
-			return;
+		if (button == null) return;
 
 		var input:FlxActionInputDigitalIFlxInput = new FlxActionInputDigitalIFlxInput(button, state);
 		trackedInputsUI.push(input);
-		action.add(input);
+		
+		var action = digitalActions.get(actionName);
+		if (action != null) action.add(input);
 	}
 	
-	public function addHitboxNOTES(action:FlxActionDigital, button:Dynamic, state:FlxInputState)
+	public function addHitboxNOTES(actionName:String, button:Dynamic, state:FlxInputState):Void
 	{
+		if (button == null) return;
+
 		var input = new FlxActionInputDigitalIFlxInput(button, state);
 		trackedInputsNOTES.push(input);
-		action.add(input);
+		
+		var action = digitalActions.get(actionName);
+		if (action != null) action.add(input);
 	}
 
-	public function setHitBox(Hitbox:Hitbox, HitboxOld:HitboxOld)
+	public function setHitBox(Hitbox:Hitbox, HitboxOld:HitboxOld, state:FlxInputState):Void
 	{
 		if (ClientPrefs.data.hitboxmode == 'Classic') {
-			inline backend.Controls.NOTE_UP, (action, state) -> addHitboxNOTES(action, HitboxOld.buttonUp, state);
-			inline backend.Controls.NOTE_DOWN, (action, state) -> addHitboxNOTES(action, HitboxOld.buttonDown, state);
-			inline backend.Controls.NOTE_LEFT, (action, state) -> addHitboxNOTES(action, HitboxOld.buttonLeft, state);
-			inline backend.Controls.NOTE_RIGHT, (action, state) -> addHitboxNOTES(action, HitboxOld.buttonRight, state);
+			addHitboxNOTES('note_up', HitboxOld.buttonUp, state);
+			addHitboxNOTES('note_down', HitboxOld.buttonDown, state);
+			addHitboxNOTES('note_left', HitboxOld.buttonLeft, state);
+			addHitboxNOTES('note_right', HitboxOld.buttonRight, state);
 		}
 		else {
-			inline backend.Control.NOTE_UP, (action, state) -> addHitboxNOTES(action, Hitbox.buttonUp, state);
-			inline backend.Control.NOTE_DOWN, (action, state) -> addHitboxNOTES(action, Hitbox.buttonDown, state);
-			inline backend.Control.NOTE_LEFT, (action, state) -> addHitboxNOTES(action, Hitbox.buttonLeft, state);
-			inline backend.Control.NOTE_RIGHT, (action, state) -> addHitboxNOTES(action, Hitbox.buttonRight, state);
+			addHitboxNOTES('note_up', Hitbox.buttonUp, state);
+			addHitboxNOTES('note_down', Hitbox.buttonDown, state);
+			addHitboxNOTES('note_left', Hitbox.buttonLeft, state);
+			addHitboxNOTES('note_right', Hitbox.buttonRight, state);
 		}
 	}
 
-	public function setMobilePadUI(MobilePad:MobilePad, DPad:String, Action:String):Void
+	public function setMobilePadUI(MobilePad:MobilePad, DPad:String, Action:String, state:FlxInputState):Void
 	{
 		if (MobilePad == null)
 			return;
@@ -138,53 +146,53 @@ class Controls
 		switch (DPad)
 		{
 			case "UP_DOWN" | "OptionsC":
-				inline backend.Control.UI_UP, (action, state) -> addButtonUI(action, MobilePad.buttonUp, state);
-				inline backend.Control.UI_DOWN, (action, state) -> addButtonUI(action, MobilePad.buttonDown, state);
+				addButtonUI('ui_up', MobilePad.buttonUp, state);
+				addButtonUI('ui_down', MobilePad.buttonDown, state);
 			case "LEFT_RIGHT":
-				inline backend.Control.UI_LEFT, (action, state) -> addButtonUI(action, MobilePad.buttonLeft, state);
-				inline backend.Control.UI_RIGHT, (action, state) -> addButtonUI(action, MobilePad.buttonRight, state);
+				addButtonUI('ui_left', MobilePad.buttonLeft, state);
+				addButtonUI('ui_right', MobilePad.buttonRight, state);
 			case "UP_LEFT_RIGHT":
-				inline backend.Control.UI_UP, (action, state) -> addButtonUI(action, MobilePad.buttonUp, state);
-				inline backend.Control.UI_LEFT, (action, state) -> addButtonUI(action, MobilePad.buttonLeft, state);
-				inline backend.Control.UI_RIGHT, (action, state) -> addButtonUI(action, MobilePad.buttonRight, state);
+				addButtonUI('ui_up', MobilePad.buttonUp, state);
+				addButtonUI('ui_left', MobilePad.buttonLeft, state);
+				addButtonUI('ui_right', MobilePad.buttonRight, state);
 			case "DUO":
-				inline backend.Control.UI_UP, (action, state) -> addButtonUI(action, MobilePad.buttonUp, state);
-				inline backend.Control.UI_DOWN, (action, state) -> addButtonUI(action, MobilePad.buttonDown, state);
-				inline backend.Control.UI_LEFT, (action, state) -> addButtonUI(action, MobilePad.buttonLeft, state);
-				inline backend.Control.UI_RIGHT, (action, state) -> addButtonUI(action, MobilePad.buttonRight, state);
-				inline backend.Control.UI_UP, (action, state) -> addButtonUI(action, MobilePad.buttonUp2, state);
-				inline backend.Control.UI_DOWN, (action, state) -> addButtonUI(action, MobilePad.buttonDown2, state);
-				inline backend.Control.UI_LEFT, (action, state) -> addButtonUI(action, MobilePad.buttonLeft2, state);
-				inline backend.Control.UI_RIGHT, (action, state) -> addButtonUI(action, MobilePad.buttonRight2, state);
+				addButtonUI('ui_up', MobilePad.buttonUp, state);
+				addButtonUI('ui_down', MobilePad.buttonDown, state);
+				addButtonUI('ui_left', MobilePad.buttonLeft, state);
+				addButtonUI('ui_right', MobilePad.buttonRight, state);
+				addButtonUI('ui_up', MobilePad.buttonUp2, state);
+				addButtonUI('ui_down', MobilePad.buttonDown2, state);
+				addButtonUI('ui_left', MobilePad.buttonLeft2, state);
+				addButtonUI('ui_right', MobilePad.buttonRight2, state);
 			case "NONE": // do nothing
 			default:
-			    inline backend.Control.UI_UP, (action, state) -> addButtonUI(action, MobilePad.buttonUp, state);
-				inline backend.Control.UI_DOWN, (action, state) -> addButtonUI(action, MobilePad.buttonDown, state);
-				inline backend.Control.UI_LEFT, (action, state) -> addButtonUI(action, MobilePad.buttonLeft, state);
-				inline backend.Control.UI_RIGHT, (action, state) -> addButtonUI(action, MobilePad.buttonRight, state);
+				addButtonUI('ui_up', MobilePad.buttonUp, state);
+				addButtonUI('ui_down', MobilePad.buttonDown, state);
+				addButtonUI('ui_left', MobilePad.buttonLeft, state);
+				addButtonUI('ui_right', MobilePad.buttonRight, state);
 		}
 
 		switch (Action)
 		{
 			case "A" | "ChartingStateC":
-				inline backend.Control.ACCEPT, (action, state) -> addButtonUI(action, MobilePad.buttonA, state);
+				addButtonUI('accept', MobilePad.buttonA, state);
 			case "B" | "B_X_Y" | "B_E":
-				inline backend.Control.BACK, (action, state) -> addButtonUI(action, MobilePad.buttonB, state);
+				addButtonUI('back', MobilePad.buttonB, state);
 			case "P":
-				inline backend.Control.PAUSE, (action, state) -> addButtonUI(action, MobilePad.buttonP, state);
+				addButtonUI('pause', MobilePad.buttonP, state);
 			case "OptionsC":
-				inline backend.Control.UI_LEFT, (action, state) -> addButtonUI(action, MobilePad.buttonLeft, state);
-				inline backend.Control.UI_RIGHT, (action, state) -> addButtonUI(action, MobilePad.buttonRight, state);
-				inline backend.Control.ACCEPT, (action, state) -> addButtonUI(action, MobilePad.buttonA, state);
-				inline backend.Control.BACK, (action, state) -> addButtonUI(action, MobilePad.buttonB, state);
+				addButtonUI('ui_left', MobilePad.buttonLeft, state);
+				addButtonUI('ui_right', MobilePad.buttonRight, state);
+				addButtonUI('accept', MobilePad.buttonA, state);
+				addButtonUI('back', MobilePad.buttonB, state);
 			case "NONE" | "E" | "controlExtend": // do nothing
 			default:
-			    inline backend.Control.ACCEPT, (action, state) -> addButtonUI(action, MobilePad.buttonA, state);
-				inline backend.Control.BACK, (action, state) -> addButtonUI(action, MobilePad.buttonB, state);
+				addButtonUI('accept', MobilePad.buttonA, state);
+				addButtonUI('back', MobilePad.buttonB, state);
 		}
 	}
 
-	public function setMobilePadNOTES(MobilePad:MobilePad, DPad:String, Action:String):Void
+	public function setMobilePadNOTES(MobilePad:MobilePad, DPad:String, Action:String, state:FlxInputState):Void
 	{
 		if (MobilePad == null)
 			return;
@@ -192,49 +200,49 @@ class Controls
 		switch (DPad)
 		{
 			case "UP_DOWN" | "OptionsC":
-				 inline backend.Control.NOTE_UP, (action, state) -> addButtonNOTES(action, MobilePad.buttonUp, state);
-				 inline backend.Control.NOTE_DOWN, (action, state) -> addButtonNOTES(action, MobilePad.buttonDown, state);
+				 addButtonNOTES('note_up', MobilePad.buttonUp, state);
+				 addButtonNOTES('note_down', MobilePad.buttonDown, state);
 			case "LEFT_RIGHT":
-				 inline backend.Control.NOTE_LEFT, (action, state) -> addButtonNOTES(action, MobilePad.buttonLeft, state);
-				 inline backend.Control.NOTE_RIGHT, (action, state) -> addButtonNOTES(action, MobilePad.buttonRight, state);
+				 addButtonNOTES('note_left', MobilePad.buttonLeft, state);
+				 addButtonNOTES('note_right', MobilePad.buttonRight, state);
 			case "UP_LEFT_RIGHT":
-				 inline backend.Control.NOTE_UP, (action, state) -> addButtonNOTES(action, MobilePad.buttonUp, state);
-				 inline backend.Control.NOTE_LEFT, (action, state) -> addButtonNOTES(action, MobilePad.buttonLeft, state);
-				 inline backend.Control.NOTE_RIGHT, (action, state) -> addButtonNOTES(action, MobilePad.buttonRight, state);
+				 addButtonNOTES('note_up', MobilePad.buttonUp, state);
+				 addButtonNOTES('note_left', MobilePad.buttonLeft, state);
+				 addButtonNOTES('note_right', MobilePad.buttonRight, state);
 			case "DUO":
-				 inline backend.Control.NOTE_UP, (action, state) -> addButtonNOTES(action, MobilePad.buttonUp, state);
-				 inline backend.Control.NOTE_DOWN, (action, state) -> addButtonNOTES(action, MobilePad.buttonDown, state);
-				 inline backend.Control.NOTE_LEFT, (action, state) -> addButtonNOTES(action, MobilePad.buttonLeft, state);
-				 inline backend.Control.NOTE_RIGHT, (action, state) -> addButtonNOTES(action, MobilePad.buttonRight, state);
-				 inline backend.Control.NOTE_UP, (action, state) -> addButtonNOTES(action, MobilePad.buttonUp2, state);
-				 inline backend.Control.NOTE_DOWN, (action, state) -> addButtonNOTES(action, MobilePad.buttonDown2, state);
-				 inline backend.Control.NOTE_LEFT, (action, state) -> addButtonNOTES(action, MobilePad.buttonLeft2, state);
-				 inline backend.Control.NOTE_RIGHT, (action, state) -> addButtonNOTES(action, MobilePad.buttonRight2, state);
+				 addButtonNOTES('note_up', MobilePad.buttonUp, state);
+				 addButtonNOTES('note_down', MobilePad.buttonDown, state);
+				 addButtonNOTES('note_left', MobilePad.buttonLeft, state);
+				 addButtonNOTES('note_right', MobilePad.buttonRight, state);
+				 addButtonNOTES('note_up', MobilePad.buttonUp2, state);
+				 addButtonNOTES('note_down', MobilePad.buttonDown2, state);
+				 addButtonNOTES('note_left', MobilePad.buttonLeft2, state);
+				 addButtonNOTES('note_right', MobilePad.buttonRight2, state);
 			case "NONE": // do nothing
 			default:
-			     inline backend.Control.NOTE_UP, (action, state) -> addButtonNOTES(action, MobilePad.buttonUp, state);
-				 inline backend.Control.NOTE_DOWN, (action, state) -> addButtonNOTES(action, MobilePad.buttonDown, state);
-				 inline backend.Control.NOTE_LEFT, (action, state) -> addButtonNOTES(action, MobilePad.buttonLeft, state);
-				 inline backend.Control.NOTE_RIGHT, (action, state) -> addButtonNOTES(action, MobilePad.buttonRight, state);
+				 addButtonNOTES('note_up', MobilePad.buttonUp, state);
+				 addButtonNOTES('note_down', MobilePad.buttonDown, state);
+				 addButtonNOTES('note_left', MobilePad.buttonLeft, state);
+				 addButtonNOTES('note_right', MobilePad.buttonRight, state);
 		}
 
 		switch (Action)
 		{
 			case "A" | "ChartingStateC":
-				 inline backend.Control.ACCEPT, (action, state) -> addButtonNOTES(action, MobilePad.buttonA, state);
+				 addButtonNOTES('accept', MobilePad.buttonA, state);
 			case "B" | "B_X_Y" | "B_E":
-				 inline backend.Control.BACK, (action, state) -> addButtonNOTES(action, MobilePad.buttonB, state);
+				 addButtonNOTES('back', MobilePad.buttonB, state);
 			case "P":
-				 inline backend.Control.PAUSE, (action, state) -> addButtonNOTES(action, MobilePad.buttonP, state);
+				 addButtonNOTES('pause', MobilePad.buttonP, state);
 			case "OptionsC":
-				 inline backend.Control.ACCEPT, (action, state) -> addButtonNOTES(action, MobilePad.buttonA, state);
-				 inline backend.Control.BACK, (action, state) -> addButtonNOTES(action, MobilePad.buttonB, state);
-				 inline backend.Control.NOTE_LEFT, (action, state) -> addButtonNOTES(action, MobilePad.buttonLeft, state);
-				 inline backend.Control.NOTE_RIGHT, (action, state) -> addButtonNOTES(action, MobilePad.buttonRight, state);
+				 addButtonNOTES('accept', MobilePad.buttonA, state);
+				 addButtonNOTES('back', MobilePad.buttonB, state);
+				 addButtonNOTES('note_left', MobilePad.buttonLeft, state);
+				 addButtonNOTES('note_right', MobilePad.buttonRight, state);
 			case "NONE" | "E" | "controlExtend": // do nothing
 			default:
-			     inline backend.Control.ACCEPT, (action, state) -> addButtonNOTES(action, MobilePad.buttonA, state));
-				 inline backend.Control.BACK, (action, state) -> addButtonNOTES(action, MobilePad.buttonB, state));
+				 addButtonNOTES('accept', MobilePad.buttonA, state);
+				 addButtonNOTES('back', MobilePad.buttonB, state);
 		}
 	}
 
