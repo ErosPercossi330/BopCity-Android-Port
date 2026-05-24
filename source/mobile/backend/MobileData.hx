@@ -116,7 +116,7 @@ class MobileData
 			}
 
 			// Then "PsychEngine/mods/" main folder
-			var folder:String = Mods.mods(fileToFind);
+			var folder:String = Paths.mods(fileToFind);
 			if(FileSystem.exists(folder) && !foldersToCheck.contains(folder)) foldersToCheck.push(Paths.mods(fileToFind));
 
 			// And lastly, the loaded mod's folder
