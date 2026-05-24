@@ -87,39 +87,25 @@ class Controls
 	public var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;
 
 	#if TOUCH_CONTROLS
-	public var trackedInputsUI:Array<FlxActionInput> = [];
-	public var trackedInputsNOTES:Array<FlxActionInput> = [];
+	public var trackedInputsUI:Array<Dynamic> = [];
+	public var trackedInputsNOTES:Array<Dynamic> = [];
 
-	public function addButtonNOTES(actionName:String, button:Dynamic, state:FlxInputState):Void
+	public function addButtonNOTES(actionName:String, button:Dynamic, state:flixel.input.FlxInputState):Void
 	{
 		if (button == null) return;
-		
-		var input:FlxActionInputDigitalIFlxInput = new FlxActionInputDigitalIFlxInput(button, state);
-		trackedInputsNOTES.push(input);
-		var action = digitalActions.get(actionName);
-		if (action != null) action.add(input);
+		trackedInputsNOTES.push(button);
 	}
 
-	public function addButtonUI(actionName:String, button:Dynamic, state:FlxInputState):Void
+	public function addButtonUI(actionName:String, button:Dynamic, state:flixel.input.FlxInputState):Void
 	{
 		if (button == null) return;
-
-		var input:FlxActionInputDigitalIFlxInput = new FlxActionInputDigitalIFlxInput(button, state);
-		trackedInputsUI.push(input);
-		
-		var action = digitalActions.get(actionName);
-		if (action != null) action.add(input);
+		trackedInputsUI.push(button);
 	}
 	
-	public function addHitboxNOTES(actionName:String, button:Dynamic, state:FlxInputState):Void
+	public function addHitboxNOTES(actionName:String, button:Dynamic, state:flixel.input.FlxInputState):Void
 	{
 		if (button == null) return;
-
-		var input = new FlxActionInputDigitalIFlxInput(button, state);
-		trackedInputsNOTES.push(input);
-		
-		var action = digitalActions.get(actionName);
-		if (action != null) action.add(input);
+		trackedInputsNOTES.push(button);
 	}
 
 	public function setHitBox(Hitbox:Hitbox, HitboxOld:HitboxOld, state:FlxInputState):Void
@@ -246,21 +232,8 @@ class Controls
 		}
 	}
 
-	public function removeVirtualControlsInput(Tinputs:Array<FlxActionInput>):Void
+	public function removeVirtualControlsInput(Tinputs:Array<Dynamic>):Void
 	{
-		for (action in this.digitalActions)
-		{
-			var i = action.inputs.length;
-			while (i-- > 0)
-			{
-				var x = Tinputs.length;
-				while (x-- > 0)
-				{
-					if (Tinputs[x] == action.inputs[i])
-						action.remove(action.inputs[i]);
-				}
-			}
-		}
 	}
 	#end
 	
