@@ -38,6 +38,7 @@ class CopyState extends MusicBeatState
     var canUpdate:Bool = true;
     var loopTimes:Int = 0; 
     var ramLimit:Float = 1024 * 1024 * 700;
+    public var luaMobilePad:MobilePad;
 
     override function create()
     {    
