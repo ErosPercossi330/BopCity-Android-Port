@@ -101,6 +101,8 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.*;
 import flixel.FlxState;
 import flixel.FlxSubState;
+import flixel.util.FlxDestroyUtil;
+import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 #end
