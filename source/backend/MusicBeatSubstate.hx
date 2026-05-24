@@ -35,7 +35,7 @@ class MusicBeatSubstate extends FlxSubState
 	public function addMobilePad(?DPad:String, ?Action:String) {
 		mobilePad = new MobilePad(DPad, Action);
 		add(mobilePad);
-		controls.setMobilePadUI(mobilePad, DPad, Action);
+		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
 		trackedinputsUI = controls.trackedInputsUI;
 		controls.trackedInputsUI = [];
 		mobilePad.alpha = ClientPrefs.mobilePadAlpha;
@@ -52,16 +52,16 @@ class MusicBeatSubstate extends FlxSubState
 
 		switch (MobileControls.mode)
 		{
-			case MOBILEPAD_RIGHT | MOBILEPAD_LEFT | MOBILEPAD_CUSTOM:
-				controls.setMobilePadNOTES(mobilec.vpad, "FULL", "NONE");
-				MusicBeatState.checkHitbox = false;
-			case DUO:
-				controls.setMobilePadNOTES(mobilec.vpad, "DUO", "NONE");
-				MusicBeatState.checkHitbox = false;
-			case HITBOX:
-				controls.setHitBox(mobilec.newhbox, mobilec.hbox);
-				MusicBeatState.checkHitbox = true;
-			default:
+		    case MOBILEPAD_RIGHT | MOBILEPAD_LEFT | MOBILEPAD_CUSTOM:
+		        controls.setMobilePadNOTES(mobilec.vpad, "FULL", "NONE", PRESSED);
+		        MusicBeatState.checkHitbox = false;
+		    case DUO:
+		        controls.setMobilePadNOTES(mobilec.vpad, "DUO", "NONE", PRESSED);
+		        MusicBeatState.checkHitbox = false;
+		    case HITBOX:
+		        controls.setHitBox(mobilec.newhbox, mobilec.hbox, PRESSED);
+		        MusicBeatState.checkHitbox = true;
+		    default:
 		}
 
 		trackedinputsNOTES = controls.trackedInputsNOTES.copy();
