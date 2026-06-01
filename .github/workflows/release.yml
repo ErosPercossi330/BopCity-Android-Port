@@ -1,6 +1,6 @@
 name: Build PsychEngine + Release
 run-name: FNF-Silly-Singles-Mobile-Port-V1.0
-on: workflow_call
+on: workflow_dispatch
 
 permissions: write-all
 
