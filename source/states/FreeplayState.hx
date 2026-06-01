@@ -173,6 +173,11 @@ class FreeplayState extends MusicBeatState
 		
 		changeSelection();
 		updateTexts();
+		
+		#if TOUCH_CONTROLS
+		addMobilePad("UP_DOWN", "A_B");
+		#end
+		
 		super.create();
 	}
 
