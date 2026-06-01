@@ -79,6 +79,10 @@ class Main extends Sprite
 		#end
 		CrashHandler.init();
 
+		#if TOUCH_CONTROLS
+		MobileData.init();
+		#end
+
 		#if VIDEOS_ALLOWED
 		hxvlc.util.Handle.init(#if (hxvlc >= "1.8.0")  ['--no-lua'] #end);
 		#end
