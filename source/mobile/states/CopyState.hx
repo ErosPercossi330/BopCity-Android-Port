@@ -20,7 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-package states;
+package mobile.states;
 
 #if COPYSTATE_ALLOWED
 import states.TitleState;
