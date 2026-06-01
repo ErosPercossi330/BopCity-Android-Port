@@ -29,6 +29,11 @@ import lime.graphics.Image;
 //042825
 #if CRASH_HANDLER
 import mobile.backend.CrashHandler;
+#if desktop
+import openfl.events.UncaughtErrorEvent;
+import haxe.CallStack;
+import haxe.io.Path;
+#end
 #end
 
 #if linux
