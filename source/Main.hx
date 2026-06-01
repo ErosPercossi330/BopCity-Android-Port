@@ -160,7 +160,6 @@ class Main extends Sprite
 		#end
 
 
-		hummusCheck();
 
 		//VideoSprite.init();
 		// shader coords fix
