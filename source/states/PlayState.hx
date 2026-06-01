@@ -697,6 +697,11 @@ class PlayState extends MusicBeatState
 		cacheCountdown();
 		cachePopUpScore();
 
+		#if TOUCH_CONTROLS
+		addMobilePad("NONE", "P");
+	    addMobilePadCamera();
+		#end
+
 		super.create();
 		Paths.clearUnusedMemory();
 
