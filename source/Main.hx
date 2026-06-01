@@ -1,5 +1,6 @@
 package;
 
+import mobile.backend.CrashHandler;
 import flixel.addons.transition.FlxTransitionableState;
 import objects.VideoSprite;
 import states.TestState;
