@@ -535,24 +535,22 @@ class Paths
 	static public function modFolders(key:String) {
 		if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) {
 			var fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
-			if(FileSystem.exists(fileToCheck)) {
+			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
-			}
-			#if (android || linux || ios)
-			else
+				#if (android || linux || ios)
+				else
 				{
 					var newPath:String = findFile(key);
 					if (newPath != null)
 						return newPath;
 				}
 				#end
-			}
+		}
 
 		for(mod in Mods.getGlobalMods()){
 			var fileToCheck:String = mods(mod + '/' + key);
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
-	     	}
 			#if (android || linux || ios)
 			else
 			{
@@ -561,8 +559,9 @@ class Paths
 					return newPath;
 			}
 			#end
-	    }
-		return  #if mobile Sys.getCwd() + #end 'mods/' + key;
+			
+		}
+		return #if mobile Sys.getCwd() + #end 'mods/' + key;
 	}
 
 	#if (android || linux || ios)
