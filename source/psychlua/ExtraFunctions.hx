@@ -4,6 +4,8 @@ import flixel.util.FlxSave;
 import openfl.utils.Assets;
 import psychlua.FunkinLua;
 
+using psychlua.FunkinLua;
+
 #if mobile
 import mobile.psychlua.Functions;
 #end

@@ -2,7 +2,8 @@ package psychlua;
 
 import Type.ValueType;
 import haxe.Constraints;
-import mobile.psychlua.FunkinLua;
+import psychlua.FunkinLua;
+using psychlua.FunkinLua;
 #if mobile
 import mobile.psychlua.Functions;
 #end
