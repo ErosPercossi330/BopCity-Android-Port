@@ -107,6 +107,9 @@ class TitleState extends MusicBeatState
 
 	function startIntro()
 	{
+
+		hummusCheck(); 
+		
 		if (!initialized)
 		{
 			if(FlxG.sound.music == null) {
@@ -248,5 +251,16 @@ class TitleState extends MusicBeatState
 			FlxG.camera.flash(FlxColor.WHITE, 4);
 			skippedIntro = true;
 		}
+	}
+
+	function hummusCheck() {
+		var isThere = FileSystem.exists('assets/shared/important/me!.png');
+		trace('is hummus there? ' + isThere);
+
+		if (!isThere) {
+			FlxG.stage.window.alert('im gonna crash out.','Hummus Missing');
+			Sys.exit(0);
+		}
+
 	}
 }
