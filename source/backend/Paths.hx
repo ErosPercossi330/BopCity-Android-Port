@@ -537,8 +537,9 @@ class Paths
 			var fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
 			if(FileSystem.exists(fileToCheck)) {
 				return fileToCheck;
+			}
 			#if (android || linux || ios)
-				else
+			else
 				{
 					var newPath:String = findFile(key);
 					if (newPath != null)
@@ -546,7 +547,6 @@ class Paths
 				}
 				#end
 			}
-		}
 
 		for(mod in Mods.getGlobalMods()){
 			var fileToCheck:String = mods(mod + '/' + key);
@@ -561,7 +561,7 @@ class Paths
 					return newPath;
 			}
 			#end
-		}
+	    }
 		return  #if mobile Sys.getCwd() + #end 'mods/' + key;
 	}
 
