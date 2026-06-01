@@ -1,6 +1,5 @@
 package;
 
-import mobile.backend.CrashHandler;
 import flixel.addons.transition.FlxTransitionableState;
 import objects.VideoSprite;
 import states.TestState;
@@ -29,9 +28,7 @@ import lime.graphics.Image;
 //crash handler stuff
 //042825
 #if CRASH_HANDLER
-import openfl.events.UncaughtErrorEvent;
-import haxe.CallStack;
-import haxe.io.Path;
+import mobile.backend.CrashHandler;
 #end
 
 #if linux
