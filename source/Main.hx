@@ -153,9 +153,6 @@ class Main extends Sprite
 
 		FlxG.signals.postStateSwitch.add(()->{FlxTransitionableState.skipNextTransIn = FlxTransitionableState.skipNextTransOut = true;});
 
-		FlxG.game.soundTray.volumeDownSound = 'assets/sounds/bop';
-		FlxG.game.soundTray.volumeUpSound = 'assets/sounds/city';
-
 		#if android FlxG.android.preventDefaultKeys = [BACK]; #end
 
 		#if mobile
