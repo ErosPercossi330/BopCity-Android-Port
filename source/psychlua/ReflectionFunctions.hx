@@ -47,7 +47,11 @@ class ReflectionFunctions
 				if (check != null) return check;
 			}
 			#end
+			#if desktop
 			var myClass:Dynamic = Type.resolveClass(classVar);
+			#elseif TOUCH_CONTROLS
+			var myClass:Dynamic = classCheck(classVar);
+			#end
 			if(myClass == null)
 			{
 				FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found', false, false, FlxColor.RED);
