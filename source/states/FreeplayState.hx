@@ -52,6 +52,9 @@ class FreeplayState extends MusicBeatState
 	{
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
+
+		FlxG.game.soundTray.volumeDownSound = #if mobile Sys.setCwd + #end 'assets/sounds/bop';
+		FlxG.game.soundTray.volumeUpSound = #if mobile Sys.setCwd + #end 'assets/sounds/city';
 		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
