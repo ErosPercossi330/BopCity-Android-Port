@@ -113,7 +113,7 @@ class ReflectionFunctions
 		return null;
 	}
 	#end
-	
+
 	public static function implement(funk:FunkinLua)
 	{
 		var lua:State = funk.lua;
@@ -353,9 +353,4 @@ class ReflectionFunctions
 		//trace('end: $obj');
 		return funcToRun != null ? Reflect.callMethod(obj, funcToRun, args) : null;
 	}
-	#if TOUCH_CONTROLS
-	public static function varCheck(className:Dynamic, variable:String):String{
-		return variable;
-	}
-	#end
 }
