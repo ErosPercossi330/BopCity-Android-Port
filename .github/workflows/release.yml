@@ -118,9 +118,9 @@ jobs:
           name: windowsBuild
           path: /home/runner/windowsBuild
 
-      - name: Zip Linux Build For Release
+      - name: Zip Windows Build For Release
         run: |
-          cd /home/runner/linuxBuild
+          cd /home/runner/windowsBuild
           zip -r "/home/runner/${{ env.PROJECT_NAME }}-Windows.zip" .
 
       - name: Download MacOS Build
