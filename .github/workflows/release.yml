@@ -47,6 +47,23 @@ jobs:
             artifactName: windowsBuild
             artifactPath: export/release/windows/bin/*
             system: Windows
+            doCache: "YES"
+          - name: MacOS
+            os: macos-15
+            buildArgs: "macos -D officialBuild -final -release" 
+            setupCommand: sh ./setup/unix.sh
+            artifactName: macosBuild
+            artifactPath: export/release/macos/bin/*
+            system: MacOS
+            doCache: "YES"
+          - name: Linux
+            os: ubuntu-22.04
+            buildArgs: "linux -D officialBuild -final -release" 
+            setupCommand: sh ./setup/unix.sh
+            artifactName: linuxBuild
+            artifactPath: export/release/linux/bin/*
+            system: Linux
+            doCache: "YES"
           - name: Android
             os: ubuntu-22.04
             buildArgs: "android -D officialBuild -final -release" 
@@ -54,6 +71,7 @@ jobs:
             artifactName: androidBuild
             artifactPath: "export/release/android/bin/app/build/outputs/apk/release/*.apk"
             system: Android
+            doCache: "YES"
           - name: iOS
             os: macos-15
             setupCommand: sh ./setup/unix.sh
@@ -61,6 +79,7 @@ jobs:
             artifactName: iOSBuild
             artifactPath: "export/release/ios/build/Release-iphoneos/*.ipa"
             system: iOS
+            doCache: "YES"
     uses: ./.github/workflows/build.yml
     with:
         name: ${{ matrix.name }}
@@ -94,16 +113,27 @@ jobs:
       - name: Move iOS File
         run: mv ${{ github.workspace }}/${{ env.PROJECT_NAME }}.ipa /home/runner/${{ env.PROJECT_NAME }}-iOS.ipa
 
-      - name: Download Windows Build
+      - name: Download MacOS Build
         uses: actions/download-artifact@main
         with:
-          name: windowsBuild
-          path: /home/runner/windowsBuild
+          name: macosBuild
+          path: /home/runner/macosBuild
 
-      - name: Zip Windows Build For Release
+      - name: Zip MacOS Build For Release
         run: |
-          cd /home/runner/windowsBuild
-          zip -r "/home/runner/${{ env.PROJECT_NAME }}-Windows.zip" .
+          cd /home/runner/macosBuild
+          zip -r "/home/runner/${{ env.PROJECT_NAME }}-MacOS.zip" .
+
+      - name: Download Linux Build
+        uses: actions/download-artifact@main
+        with:
+          name: linuxBuild
+          path: /home/runner/linuxBuild
+
+      - name: Zip Linux Build For Release
+        run: |
+          cd /home/runner/linuxBuild
+          zip -r "/home/runner/${{ env.PROJECT_NAME }}-Linux.zip" .
 
       - name: Publish The Release
         uses: softprops/action-gh-release@v2
