@@ -306,6 +306,10 @@ class PlayState extends MusicBeatState
 		// for lua
 		instance = this;
 
+		#if TOUCH_CONTROLS
+		MobileData.init();
+		#end
+
 		PauseSubState.songName = null; //Reset to default
 		playbackRate = ClientPrefs.getGameplaySetting('songspeed');
 
