@@ -3955,7 +3955,7 @@ class PlayState extends MusicBeatState
 			variables.set("luaMobilePad", luaMobilePad);
 
 		luaMobilePad = new MobilePad(DPad, Action);
-		luaMobilePad.alpha = ClientPrefs.mobilePadAlpha;
+		luaMobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
 	public function addLuaMobilePad() {
