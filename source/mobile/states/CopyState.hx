@@ -172,7 +172,7 @@ class CopyState extends MusicBeatState
                         var library = LimeAssets.getLibrary(libraryName);
                         
                         if (library != null) {
-                            internalSize = library.exists(symbolID, "BINARY") ? library.size(symbolID) : -1;
+                            internalSize = library.exists(symbolID, "BINARY") ? library.sizes(symbolID) : -1;
                         }
                     }
                     if (internalSize != -1 && info.size == internalSize) {
