@@ -17,6 +17,12 @@
       "version": "5.8.0"
     },
     {
+      "name": "hxcpp",
+      "type": "git",
+      "dir": null,
+      "url": "https://github.com/kittycathy233/hxcpp"
+    },
+    {
       "name": "flixel-addons",
       "type": "haxelib",
       "version": "3.3.2"
