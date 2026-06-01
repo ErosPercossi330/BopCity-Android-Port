@@ -538,7 +538,6 @@ class Paths
 			if(FileSystem.exists(fileToCheck)) {
 				return fileToCheck;
 			#if (android || linux || ios)
-			}
 				else
 				{
 					var newPath:String = findFile(key);
@@ -553,8 +552,8 @@ class Paths
 			var fileToCheck:String = mods(mod + '/' + key);
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
+	     	}
 			#if (android || linux || ios)
-		    }
 			else
 			{
 				var newPath:String = findFile(key);
