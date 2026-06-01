@@ -175,8 +175,8 @@ class FreeplayState extends MusicBeatState
 		updateTexts();
 		
 		#if TOUCH_CONTROLS
-		addMobilePad("UP_DOWN", "A_B");
-		#end
+        addMobilePad("FULL", "A_B_C_X_Y_Z");
+        #end
 		
 		super.create();
 	}
@@ -184,6 +184,9 @@ class FreeplayState extends MusicBeatState
 	override function closeSubState() {
 		changeSelection(0, false);
 		persistentUpdate = true;
+		#if TOUCH_CONTROLS
+		removeMobilePad();
+		#end
 		super.closeSubState();
 	}
 
