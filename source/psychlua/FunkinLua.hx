@@ -1807,12 +1807,6 @@ class FunkinLua {
 	public var runtimeShaders:Map<String, Array<String>> = new Map<String, Array<String>>();
 	#end
 
-	#if TOUCH_CONTROLS
-	public static function varCheck(className:Dynamic, variable:String):String{
-		return variable;
-	}
-	#end
-
 	public function initLuaShader(name:String, ?glslVersion:Int = 120)
 	{
 		if(!ClientPrefs.data.shaders) return false;
