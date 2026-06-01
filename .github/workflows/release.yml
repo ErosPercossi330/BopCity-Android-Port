@@ -89,6 +89,7 @@ jobs:
         artifactName: ${{ matrix.artifactName }}
         artifactPath: ${{ matrix.artifactPath }}
         system: ${{ matrix.system }}
+        doCache: ${{ matrix.doCache }}
 
   Releaser:
     needs: [get-commit-hash, build]
