@@ -1,5 +1,5 @@
-name: Build PsychEngine + Release
-run-name: FNF-Silly-Singles-Mobile-Port-V1.0
+name: Build BopCity + Release
+run-name: BopCity-Mobile & PC
 on: workflow_dispatch
 
 permissions: write-all
