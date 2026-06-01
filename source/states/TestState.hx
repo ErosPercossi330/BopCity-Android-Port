@@ -32,8 +32,19 @@ class TestState extends MusicBeatState
 	{
 		super.update(elapsed);
 
+		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || controls.ACCEPT;
 
-        if (FlxG.mouse.justPressed)
+		#if mobile
+		for (touch in FlxG.touches.list)
+		{
+			if (touch.justPressed)
+			{
+				pressedEnter = true;
+			}
+		}
+		#end
+			
+        if (pressedEnter)
             {
                 var mousePos = FlxG.mouse.getScreenPosition();
                 var ragdoll = new BoyfriendRagdoll(mousePos.x, mousePos.y, 1);
