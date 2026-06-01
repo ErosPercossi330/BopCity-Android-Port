@@ -38,9 +38,9 @@ class MusicBeatState extends FlxUIState
 		add(mobilePad);
 
 		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
-		trackedinputsUI = controls.trackedInputsUI;
+		trackedinputsUI = [for (input in controls.trackedInputsUI) (input : FlxActionInput)];
 		controls.trackedInputsUI = [];
-		mobilePad.alpha = ClientPrefs.mobilePadAlpha;
+		mobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
 	public function removeMobilePad() {
@@ -84,7 +84,7 @@ class MusicBeatState extends FlxUIState
 		    default:
 		}
 
-		trackedinputsNOTES = controls.trackedInputsNOTES.copy();
+		trackedinputsNOTES = [for (input in controls.trackedInputsNOTES) (input : FlxActionInput)];
 
 		var camcontrol = new flixel.FlxCamera();
 		FlxG.cameras.add(camcontrol, false);
