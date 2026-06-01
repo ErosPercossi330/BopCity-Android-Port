@@ -148,7 +148,7 @@ class CopyState extends MusicBeatState
         
         for (file in assets)
         {
-            if (file.endsWith('/') || OpenFLAssets.isLocal(file, "DIR")) continue;
+            if (file.endsWith('/') || OpenFLAssets.isLocal(file, openfl.utils.AssetType.BINARY)) continue;
 
             if (file.endsWith(IGNORE_FOLDER_FILE_NAME))
                 directoriesToIgnore.push(Path.directory(file));
@@ -172,7 +172,7 @@ class CopyState extends MusicBeatState
                         var library = LimeAssets.getLibrary(libraryName);
                         
                         if (library != null) {
-                            internalSize = library.exists(symbolID, "BINARY") ? library.sizes(symbolID) : -1;
+                            internalSize = library.exists(symbolID, "BINARY") && library.sizes.exists(symbolID) ? library.sizes.get(symbolID) : -1;
                         }
                     }
                     if (internalSize != -1 && info.size == internalSize) {
