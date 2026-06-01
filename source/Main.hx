@@ -3,6 +3,9 @@ package;
 import flixel.addons.transition.FlxTransitionableState;
 import objects.VideoSprite;
 import states.TestState;
+#if mobile
+import mobile.states.CopyState;
+#end
 #if android
 import android.content.Context;
 #end
