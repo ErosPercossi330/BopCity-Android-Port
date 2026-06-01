@@ -22,7 +22,7 @@
 
 package mobile.states;
 
-#if COPYSTATE_ALLOWED
+#if mobile
 import states.TitleState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenFLAssets;
