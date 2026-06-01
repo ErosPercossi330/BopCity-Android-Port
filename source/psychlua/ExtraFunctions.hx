@@ -2,9 +2,6 @@ package psychlua;
 
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
-import psychlua.FunkinLua;
-
-using psychlua.FunkinLua;
 
 #if mobile
 import mobile.psychlua.Functions;
@@ -16,11 +13,7 @@ import mobile.psychlua.Functions;
 
 class ExtraFunctions
 {
-	public static function implement(funk:FunkinLua)
-	{
-		var lua:State = funk.lua;
-
-		#if TOUCH_CONTROLS
+	#if TOUCH_CONTROLS
 	public static function varCheck(className:Dynamic, variable:String):String{
 		return variable;
 	}
@@ -114,6 +107,10 @@ class ExtraFunctions
 		return null;
 	}
 	#end
+	
+	public static function implement(funk:FunkinLua)
+	{
+		var lua:State = funk.lua;
 		
 		// Keyboard & Gamepads
 		Lua_helper.add_callback(lua, "keyboardJustPressed", function(name:String) return Reflect.getProperty(FlxG.keys.justPressed, name));
