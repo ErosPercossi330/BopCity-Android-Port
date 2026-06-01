@@ -77,6 +77,11 @@ jobs:
           haxelib run lime config JAVA_HOME $JAVA_HOME_17_X64
           haxelib run lime config ANDROID_SETUP true
 
+      - name: Configure Libs
+        run: |
+            haxelib set lime git
+            haxelib set hxcpp git
+
       - name: Compile
         run: haxelib run lime build ${{ inputs.buildArgs }}
 
