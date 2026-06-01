@@ -2,6 +2,7 @@ package psychlua;
 
 import Type.ValueType;
 import haxe.Constraints;
+import mobile.psychlua.FunkinLua;
 #if mobile
 import mobile.psychlua.Functions;
 #end
@@ -36,7 +37,10 @@ class ReflectionFunctions
 		});
 		Lua_helper.add_callback(lua, "getPropertyFromClass", function(classVar:String, variable:String, ?allowMaps:Bool = false) {
 			@:privateAccess
-			#if TOUCH_CONTROLS
+			#if desktop
+			var myClass:Dynamic = Type.resolveClass(classVar);
+			#elseif TOUCH_CONTROLS
+			var myClass:Dynamic = classCheck(classVar);
 			var variableplus:String = varCheck(myClass, variable);
 			#end
 			var killMe:Array<String> = variable.split('.');
@@ -46,11 +50,6 @@ class ReflectionFunctions
 				check = specialKeyCheck(variableplus); //fuck you old lua 🙃
 				if (check != null) return check;
 			}
-			#end
-			#if desktop
-			var myClass:Dynamic = Type.resolveClass(classVar);
-			#elseif TOUCH_CONTROLS
-			var myClass:Dynamic = classCheck(classVar);
 			#end
 			if(myClass == null)
 			{
