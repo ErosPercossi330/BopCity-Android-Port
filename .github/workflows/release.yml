@@ -1,10 +1,8 @@
 name: Build PsychEngine + Release
 run-name: FNF-Silly-Singles-Mobile-Port-V1.0
-on: workflow_dispatch
+on: workflow_call
 
-permissions:
-  contents: write
-  discussions: write
+permissions: write-all
 
 env:
   PROJECT_NAME: Bopcity
