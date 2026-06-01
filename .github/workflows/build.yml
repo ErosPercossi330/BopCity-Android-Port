@@ -60,7 +60,7 @@ jobs:
         id: setup-ndk
         uses: nttld/setup-ndk@main
         with:
-          ndk-version: r27c
+          ndk-version: r21c
           add-to-path: false
 
       - name: Install Libraries
@@ -76,6 +76,15 @@ jobs:
           haxelib run lime config ANDROID_NDK_ROOT ${{ steps.setup-ndk.outputs.ndk-path }}
           haxelib run lime config JAVA_HOME $JAVA_HOME_17_X64
           haxelib run lime config ANDROID_SETUP true
+
+      - name: Configure Libs
+        run: |
+            haxelib set lime git
+            haxelib set hxcpp git
+
+      - name: Clean Android
+        if: inputs.system == 'Android'
+        run: haxelib run lime clean android
 
       - name: Compile
         run: haxelib run lime build ${{ inputs.buildArgs }}

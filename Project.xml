@@ -161,6 +161,10 @@
 	<haxedef name="HXCPP_CHECK_POINTER" if="CRASH_HANDLER" />
 	<haxedef name="HXCPP_STACK_LINE" if="CRASH_HANDLER" />
 	<haxedef name="HXCPP_STACK_TRACE" if="CRASH_HANDLER" />
+
+	<haxedef name="HXCPP_NO_GC_BIG_BLOCKS" if="android" />
+	<haxedef name="no_debug" if="android" />
+	<pragma hxcpp="no_global_optimization" if="android" />
 	
 	<!--Disable deprecated warnings-->
 	<haxedef name='no-deprecation-warnings' />

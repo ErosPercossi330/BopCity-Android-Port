@@ -2,6 +2,8 @@ package psychlua;
 
 import Type.ValueType;
 import haxe.Constraints;
+import psychlua.FunkinLua;
+using psychlua.FunkinLua;
 #if mobile
 import mobile.psychlua.Functions;
 #end
@@ -16,6 +18,102 @@ import substates.GameOverSubstate;
 class ReflectionFunctions
 {
 	static final instanceStr:Dynamic = "##PSYCHLUA_STRINGTOOBJ";
+
+	#if TOUCH_CONTROLS
+	public static function varCheck(className:Dynamic, variable:String):String{
+		return variable;
+	}
+
+	public static function classCheck(className:String):Dynamic
+	{
+		return Type.resolveClass(className);
+	}
+
+	public static function specialKeyCheck(keyName:String):Dynamic
+	{
+		var textfix:Array<String> = keyName.trim().split('.');
+		var type:String = textfix[1].trim();
+		var key:String = textfix[2].trim();
+		var extraControl:Dynamic = null;
+
+		//Custom return thing
+		for (num in 1...31) {
+			if (MusicBeatState.mobilec.newhbox != null) {
+				//trace("Current Mode: Hitbox");
+				var hitbox:Dynamic = Reflect.getProperty(MusicBeatState.mobilec.newhbox, 'buttonExtra' + num);
+				if (key == Reflect.field(hitbox, 'returnedButton')) {
+					//trace('button ${num} returned to ' + Reflect.field(hitbox, 'returnedButton'));
+					if (Reflect.getProperty(hitbox, type)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		for (num in 1...5){
+			if (ClientPrefs.data.extraKeys >= num && key == Reflect.field(ClientPrefs, 'extraKeyReturn' + num)){
+				if (MusicBeatState.mobilec.newhbox != null) {
+					extraControl = Reflect.getProperty(MusicBeatState.mobilec.newhbox, 'buttonExtra' + num);
+				}
+				else if (MusicBeatState.mobilec.hbox != null)
+					extraControl = Reflect.getProperty(MusicBeatState.mobilec.hbox, 'buttonExtra' + num);
+				else
+					extraControl = Reflect.getProperty(MusicBeatState.mobilec.vpad, 'buttonExtra' + num);
+				if (Reflect.getProperty(extraControl, type))
+					return true;
+			}
+		}
+		return null;
+	}
+
+	//Used for other extra buttons
+	public static function specialKeyCheckForOthers(key:String, type:String):Dynamic
+	{
+		//Custom return thing
+		for (num in 1...31) {
+			if (MusicBeatState.mobilec.newhbox != null) {
+				//trace("Current Mode: Hitbox");
+				var hitbox:Dynamic = Reflect.getProperty(MusicBeatState.mobilec.newhbox, 'buttonExtra' + num);
+				if (key.toUpperCase() == Reflect.field(hitbox, 'returnedButton')) {
+					//trace('button ${num} returned to ' + Reflect.field(hitbox, 'returnedButton'));
+					if (Reflect.getProperty(hitbox, type)) {
+						return true;
+					}
+				}
+			}
+		}
+
+		if (MusicBeatState.mobilec.newhbox != null){
+			var extraControl = MusicBeatState.mobilec.current;
+			var Extra1:Bool = (MusicBeatState.mobilec.newhbox.buttonExtra1.returnedButton == null);
+			var Extra2:Bool = (MusicBeatState.mobilec.newhbox.buttonExtra2.returnedButton == null);
+			var Extra3:Bool = (MusicBeatState.mobilec.newhbox.buttonExtra3.returnedButton == null);
+			var Extra4:Bool = (MusicBeatState.mobilec.newhbox.buttonExtra4.returnedButton == null);
+			key = key.toUpperCase();
+
+			if (key == ClientPrefs.data.extraKeyReturn1.toUpperCase() && extraControl.buttonExtra1 != null && Reflect.getProperty(extraControl.buttonExtra1, type) && Extra1)
+				return true;
+			if (key == ClientPrefs.data.extraKeyReturn2.toUpperCase() && extraControl.buttonExtra2 != null && Reflect.getProperty(extraControl.buttonExtra2, type) && Extra2)
+				return true;
+			if (key == ClientPrefs.data.extraKeyReturn3.toUpperCase() && extraControl.buttonExtra3 != null && Reflect.getProperty(extraControl.buttonExtra3, type) && Extra3)
+				return true;
+			if (key == ClientPrefs.data.extraKeyReturn4.toUpperCase() && extraControl.buttonExtra4 != null && Reflect.getProperty(extraControl.buttonExtra4, type) && Extra4)
+				return true;
+		} else {
+			var extraControl = MusicBeatState.mobilec.current;
+			if (key == ClientPrefs.data.extraKeyReturn1.toUpperCase() && extraControl.buttonExtra1 != null && Reflect.getProperty(extraControl.buttonExtra1, type))
+				return true;
+			if (key == ClientPrefs.data.extraKeyReturn2.toUpperCase() && extraControl.buttonExtra2 != null && Reflect.getProperty(extraControl.buttonExtra2, type))
+				return true;
+			if (key == ClientPrefs.data.extraKeyReturn3.toUpperCase() && extraControl.buttonExtra3 != null && Reflect.getProperty(extraControl.buttonExtra3, type))
+				return true;
+			if (key == ClientPrefs.data.extraKeyReturn4.toUpperCase() && extraControl.buttonExtra4 != null && Reflect.getProperty(extraControl.buttonExtra4, type))
+				return true;
+		}
+		return null;
+	}
+	#end
+
 	public static function implement(funk:FunkinLua)
 	{
 		var lua:State = funk.lua;
@@ -36,7 +134,10 @@ class ReflectionFunctions
 		});
 		Lua_helper.add_callback(lua, "getPropertyFromClass", function(classVar:String, variable:String, ?allowMaps:Bool = false) {
 			@:privateAccess
-			#if TOUCH_CONTROLS
+			#if desktop
+			var myClass:Dynamic = Type.resolveClass(classVar);
+			#elseif TOUCH_CONTROLS
+			var myClass:Dynamic = classCheck(classVar);
 			var variableplus:String = varCheck(myClass, variable);
 			#end
 			var killMe:Array<String> = variable.split('.');
@@ -47,7 +148,6 @@ class ReflectionFunctions
 				if (check != null) return check;
 			}
 			#end
-			var myClass:Dynamic = Type.resolveClass(classVar);
 			if(myClass == null)
 			{
 				FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found', false, false, FlxColor.RED);
@@ -253,9 +353,4 @@ class ReflectionFunctions
 		//trace('end: $obj');
 		return funcToRun != null ? Reflect.callMethod(obj, funcToRun, args) : null;
 	}
-	#if TOUCH_CONTROLS
-	public static function varCheck(className:Dynamic, variable:String):String{
-		return variable;
-	}
-	#end
 }

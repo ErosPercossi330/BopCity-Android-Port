@@ -36,9 +36,11 @@ class MusicBeatSubstate extends FlxSubState
 		mobilePad = new MobilePad(DPad, Action);
 		add(mobilePad);
 		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
-		trackedinputsUI = controls.trackedInputsUI;
+		
+		trackedinputsUI = [for (input in controls.trackedInputsUI) (input : FlxActionInput)];
 		controls.trackedInputsUI = [];
-		mobilePad.alpha = ClientPrefs.mobilePadAlpha;
+		
+		mobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
 	/*
@@ -52,19 +54,19 @@ class MusicBeatSubstate extends FlxSubState
 
 		switch (MobileControls.mode)
 		{
-		    case MOBILEPAD_RIGHT | MOBILEPAD_LEFT | MOBILEPAD_CUSTOM:
-		        controls.setMobilePadNOTES(mobilec.vpad, "FULL", "NONE", PRESSED);
-		        MusicBeatState.checkHitbox = false;
-		    case DUO:
-		        controls.setMobilePadNOTES(mobilec.vpad, "DUO", "NONE", PRESSED);
-		        MusicBeatState.checkHitbox = false;
-		    case HITBOX:
-		        controls.setHitBox(mobilec.newhbox, mobilec.hbox, PRESSED);
-		        MusicBeatState.checkHitbox = true;
-		    default:
+			case MOBILEPAD_RIGHT | MOBILEPAD_LEFT | MOBILEPAD_CUSTOM:
+				controls.setMobilePadNOTES(mobilec.vpad, "FULL", "NONE", PRESSED);
+				MusicBeatState.checkHitbox = false;
+			case DUO:
+				controls.setMobilePadNOTES(mobilec.vpad, "DUO", "NONE", PRESSED);
+				MusicBeatState.checkHitbox = false;
+			case HITBOX:
+				controls.setHitBox(mobilec.newhbox, mobilec.hbox, PRESSED);
+				MusicBeatState.checkHitbox = true;
+			default:
 		}
 
-		trackedinputsNOTES = controls.trackedInputsNOTES.copy();
+		trackedinputsNOTES = [for (input in controls.trackedInputsNOTES) (input : FlxActionInput)];
 
 		var camcontrol = new flixel.FlxCamera();
 		FlxG.cameras.add(camcontrol, false);
@@ -196,12 +198,12 @@ class MusicBeatSubstate extends FlxSubState
 
 	public function beatHit():Void
 	{
-		//do literally nothing dumbass
+		//do literally nothing
 	}
 	
 	public function sectionHit():Void
 	{
-		//yep, you guessed it, nothing again, dumbass
+		//yep, you guessed it, nothing again
 	}
 	
 	function getBeatsOnSection()
