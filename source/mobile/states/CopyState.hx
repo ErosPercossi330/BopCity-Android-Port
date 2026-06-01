@@ -1,6 +1,6 @@
-package states;
+package mobile.states;
 
-#if COPYSTATE_ALLOWED
+#if COPYSTATE
 import states.TitleState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenFLAssets;
