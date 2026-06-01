@@ -95,4 +95,22 @@ class CustomSubstate extends MusicBeatSubstate
 		PlayState.instance.setOnHScript('customSubstateName', name);
 		super.destroy();
 	}
+	
+	public static function insertLuaMpad(?pos:Int = -1)
+	{
+		#if LUAMPAD_ALLOWED
+		if(instance != null)
+		{
+			var tagObject:FlxObject = PlayState.instance.luaMobilePad;
+
+			if(tagObject != null)
+			{
+				if(pos < 0) instance.add(tagObject);
+				else instance.insert(pos, tagObject);
+				return true;
+			}
+		}
+		#end
+		return false;
+	}
 }
