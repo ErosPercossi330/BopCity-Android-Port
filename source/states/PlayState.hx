@@ -77,6 +77,10 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
+	#if LUAMPAD_ALLOWED
+	public var luaMobilePad:MobilePad; //trust me, you'll never need to access this directly
+	#end
+		
 	public static var ratingStuff:Array<Dynamic> = [
 		['D1 BOP!', 0.2], //From 0% to 19%
 		['Bop', 0.4], //From 20% to 39%
@@ -3419,6 +3423,10 @@ class PlayState extends MusicBeatState
 		Note.globalRgbShaders = [];
 		backend.NoteTypesConfig.clearNoteTypesData();
 		instance = null;
+		#if LUAMPAD_ALLOWED
+		if (luaMobilePad != null)
+			luaMobilePad = FlxDestroyUtil.destroy(luaMobilePad);
+		#end
 		super.destroy();
 	}
 
