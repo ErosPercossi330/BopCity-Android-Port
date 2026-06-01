@@ -1,6 +1,6 @@
 package mobile.states;
 
-#if COPYSTATE
+#if (mobile && MODS_ALLOWED)
 import states.TitleState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenFLAssets;
