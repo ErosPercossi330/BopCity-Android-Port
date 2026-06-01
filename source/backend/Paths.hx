@@ -554,6 +554,7 @@ class Paths
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
 			#if (android || linux || ios)
+		    }
 			else
 			{
 				var newPath:String = findFile(key);
