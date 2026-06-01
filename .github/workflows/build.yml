@@ -82,6 +82,10 @@ jobs:
             haxelib set lime git
             haxelib set hxcpp git
 
+      - name: Clean Android
+        if: inputs.system == 'Android'
+        run: haxelib run lime clean android
+
       - name: Compile
         run: haxelib run lime build ${{ inputs.buildArgs }}
 
