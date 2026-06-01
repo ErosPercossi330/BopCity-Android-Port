@@ -87,7 +87,7 @@ class Hitbox extends FlxSpriteGroup
 			add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), Std.int(FlxG.height * 1), 0xFF12FA05));
 			add(buttonRight = createHint((FlxG.width / 2) + (FlxG.width / 4), 0, Std.int(FlxG.width / 4), Std.int(FlxG.height * 1), 0xFFF9393F));
 		}else{
-			if (ClientPrefs.hitboxLocation == 'Bottom') {
+			if (ClientPrefs.data.hitboxLocation == 'Bottom') {
 				add(buttonLeft = createHint(0, 0, Std.int(FlxG.width / 4), Std.int(FlxG.height * 0.8), 0xFFC24B99));
 				add(buttonDown = createHint(FlxG.width / 4, 0, Std.int(FlxG.width / 4), Std.int(FlxG.height * 0.8), 0xFF00FFFF));
 				add(buttonUp = createHint(FlxG.width / 2, 0, Std.int(FlxG.width / 4), Std.int(FlxG.height * 0.8), 0xFF12FA05));
@@ -278,7 +278,7 @@ class HitboxOld extends FlxSpriteGroup {
 			hitbox.add(add(buttonRight = createhitbox(960, 0, "right", "mobile/Hitbox/hitbox")));
 		}else{
 			if (ClientPrefs.data.hitboxLocation == 'Bottom') {
-				switch (ClientPrefs.extraKeys) {
+				switch (ClientPrefs.data.extraKeys) {
 					case 2:
 						hitbox.add(add(buttonLeft = createhitbox(0, 0, "left", "mobile/Hitbox/hitboxBottom-2")));
 						hitbox.add(add(buttonDown = createhitbox(320, 0, "down", "mobile/Hitbox/hitboxBottom-2")));
