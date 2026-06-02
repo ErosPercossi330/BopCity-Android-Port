@@ -134,6 +134,10 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		changeSelection();
 		reloadCheckboxes();
+
+		#if TOUCH_CONTROLS
+        addMobilePad("FULL", "A_B_C");
+        #end
 	}
 
 	var nextAccept:Int = 5;
@@ -141,16 +145,16 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	var holdValue:Float = 0;
 	override function update(elapsed:Float)
 	{
-		if (controls.UI_UP_P)
+		if (controls.UI_UP_P #if mobile || mobilePad.buttonUp.justPressed #end)
 		{
 			changeSelection(-1);
 		}
-		if (controls.UI_DOWN_P)
+		if (controls.UI_DOWN_P #if mobile || mobilePad.buttonDown.justPressed #end)
 		{
 			changeSelection(1);
 		}
 
-		if (controls.BACK) {
+		if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end) {
 			close();
 			ClientPrefs.saveSettings();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -174,8 +178,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 					reloadCheckboxes();
 				}
 			} else {
-				if(controls.UI_LEFT || controls.UI_RIGHT) {
-					var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P);
+				if(controls.UI_LEFT || controls.UI_RIGHT  #if mobile || mobilePad.buttonLeft.justPressed || mobilePad.buttonRight.justPressed #end) {
+					var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P #if mobile || mobilePad.buttonLeft.justPressed || mobilePad.buttonRight.justPressed #end);
 					if(holdTime > 0.5 || pressed) {
 						if(pressed) {
 							var add:Dynamic = null;
@@ -259,12 +263,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 					if(curOption.type != 'string') {
 						holdTime += elapsed;
 					}
-				} else if(controls.UI_LEFT_R || controls.UI_RIGHT_R) {
+				} else if(controls.UI_LEFT_R || controls.UI_RIGHT_R #if mobile || mobilePad.buttonLeft.justReleased || mobilePad.buttonRight.justReleased #end) {
 					clearHold();
 				}
 			}
 
-			if(controls.RESET)
+			if(controls.RESET #if mobile || mobilePad.buttonC.justPressed #end)
 			{
 				for (i in 0...optionsArray.length)
 				{
