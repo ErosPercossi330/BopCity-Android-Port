@@ -27,10 +27,12 @@ class MusicBeatSubstate extends FlxSubState
 		return Controls.instance;
 
 	#if TOUCH_CONTROLS
+	public static var checkHitbox:Bool = false;
 	public var mobilePad:MobilePad;
 	public static var mobilec:MobileControls;
-	var trackedinputsUI:Array<Dynamic> = [];
-	var trackedinputsNOTES:Array<Dynamic> = [];
+
+	var trackedinputsUI:Map<String, Array<Dynamic>>;
+	var trackedinputsNOTES:Map<String, Array<Dynamic>>;
 
 	public function addMobilePad(?DPad:String, ?Action:String) {
 		if (mobilePad != null)
@@ -39,17 +41,27 @@ class MusicBeatSubstate extends FlxSubState
 		mobilePad = new MobilePad(DPad, Action);
 		add(mobilePad);
 
-		controls.trackedInputsUI = [];
+		controls.trackedInputsUI.clear();
 		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
+
 		trackedinputsUI = controls.trackedInputsUI;
-		
 		mobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
-	public function addMobileControls() {
-		controls.trackedInputsNOTES = [];
+	public function removeMobilePad() {
+		if (mobilePad != null)
+			remove(mobilePad);
+	}
+
+	public function removeMobileControls() {
+		if (mobilec != null)
+			remove(mobilec);
+	}
+
+	public function addMobileControls(?customControllerValue:Int, ?mode:String, ?action:String) {
+		controls.trackedInputsNOTES.clear();
 		
-		mobilec = new MobileControls();
+		mobilec = new MobileControls(customControllerValue, mode, action);
 
 		switch (MobileControls.mode)
 		{
@@ -75,14 +87,6 @@ class MusicBeatSubstate extends FlxSubState
 		add(mobilec);
 	}
 
-	public function removeMobilePad() {
-		if (trackedinputsUI.length > 0)
-			controls.removeVirtualControlsInput(trackedinputsUI);
-
-		if (mobilePad != null)
-			remove(mobilePad);
-	}
-
 	public function addMobilePadCamera() {
 		var camcontrol = new flixel.FlxCamera();
 		camcontrol.bgColor.alpha = 0;
@@ -91,22 +95,16 @@ class MusicBeatSubstate extends FlxSubState
 	}
 
 	override function destroy() {
-		if (trackedinputsNOTES.length > 0)
-			controls.removeVirtualControlsInput(trackedinputsNOTES);
-
-		if (trackedinputsUI.length > 0)
-			controls.removeVirtualControlsInput(trackedinputsUI);
-
 		super.destroy();
 
 		if (mobilePad != null)
 			mobilePad = FlxDestroyUtil.destroy(mobilePad);
-			
+
 		if (mobilec != null)
 			mobilec = FlxDestroyUtil.destroy(mobilec);
-
-		controls.trackedInputsUI = [];
-		controls.trackedInputsNOTES = [];
+			
+		controls.trackedInputsUI.clear();
+		controls.trackedInputsNOTES.clear();
 	}
 	#end
 
