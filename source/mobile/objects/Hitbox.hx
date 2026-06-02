@@ -300,7 +300,7 @@ class HitboxOld extends FlxSpriteGroup {
 		var button = new MobileButton(x, y);
 		button.loadGraphic(FlxGraphic.fromFrame(getFrames(texture).getByName(frames)));
 		button.antialiasing = orgAntialiasing;
-		button.alpha = 0;// sorry but I can't hard lock the hitbox alpha
+		button.alpha = 0.0001;// sorry but I can't hard lock the hitbox alpha
 		button.onDown.callback = function (){ FlxTween.num(0, 0.75, 0.075, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); };
 		button.onUp.callback = function (){ FlxTween.num(0.75, 0, 0.1, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); }
 		button.onOut.callback = function (){ FlxTween.num(button.alpha, 0, 0.2, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); }
@@ -308,8 +308,16 @@ class HitboxOld extends FlxSpriteGroup {
 	}
 
 	public function getFrames(?texture:String = 'mobile/Hitbox/hitbox'):FlxAtlasFrames {
-		return Paths.getSparrowAtlas(texture);
-	}
+        var img:FlxGraphic = Paths.image(texture);
+        var xmlPath:String = 'assets/shared/images/' + texture + '.xml';
+        
+        #if sys
+        if (sys.FileSystem.exists(xmlPath)) {
+            return FlxAtlasFrames.fromSparrow(img, sys.io.File.getContent(xmlPath));
+        }
+        #end
+        return Paths.getSparrowAtlas(texture);
+    }
 
 	override public function destroy():Void {
 		super.destroy();
