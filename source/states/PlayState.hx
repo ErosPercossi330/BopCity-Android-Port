@@ -2994,7 +2994,6 @@ class PlayState extends MusicBeatState
 		if (!controls.controllerMode)
 		{
 			#if debug
-			//Prevents crash specifically on debug without needing to try catch shit
 			@:privateAccess if (!FlxG.keys._keyListMap.exists(eventKey)) return;
 			#end
 
@@ -3002,122 +3001,12 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	private function keyPressed(key:Int)
-	{
-		if(cpuControlled || paused || inCutscene || key < 0 || key >= playerStrums.length || !generatedMusic || endingSong || boyfriend.stunned) return;
-
-		var ret:Dynamic = callOnScripts('onKeyPressPre', [key]);
-		if(ret == LuaUtils.Function_Stop) return;
-
-		// more accurate hit time for the ratings?
-		var lastTime:Float = Conductor.songPosition;
-		if(Conductor.songPosition >= 0) Conductor.songPosition = FlxG.sound.music.time;
-
-		// obtain notes that the player can hit
-		var plrInputNotes:Array<Note> = notes.members.filter(function(n:Note):Bool {
-			var canHit:Bool = !strumsBlocked[n.noteData] && n.canBeHit && n.mustPress && !n.tooLate && !n.wasGoodHit && !n.blockHit;
-			return n != null && canHit && !n.isSustainNote && n.noteData == key;
-		});
-		plrInputNotes.sort(sortHitNotes);
-
-		var shouldMiss:Bool = !ClientPrefs.data.ghostTapping;
-
-		if (plrInputNotes.length != 0) { // slightly faster than doing `> 0` lol
-			var funnyNote:Note = plrInputNotes[0]; // front note
-
-			if (plrInputNotes.length > 1) {
-				var doubleNote:Note = plrInputNotes[1];
-
-				if (doubleNote.noteData == funnyNote.noteData) {
-					// if the note has a 0ms distance (is on top of the current note), kill it
-					if (Math.abs(doubleNote.strumTime - funnyNote.strumTime) < 1.0)
-						invalidateNote(doubleNote);
-					else if (doubleNote.strumTime < funnyNote.strumTime)
-					{
-						// replace the note if its ahead of time (or at least ensure "doubleNote" is ahead)
-						funnyNote = doubleNote;
-					}
-				}
-			}
-			goodNoteHit(funnyNote);
-		}
-		else if(shouldMiss)
-		{
-			callOnScripts('onGhostTap', [key]);
-			noteMissPress(key);
-		}
-
-		// Needed for the  "Just the Two of Us" achievement.
-		//									- Shadow Mario
-		if(!keysPressed.contains(key)) keysPressed.push(key);
-
-		//more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
-		Conductor.songPosition = lastTime;
-
-		var spr:StrumNote = playerStrums.members[key];
-		if(strumsBlocked[key] != true && spr != null && spr.animation.curAnim.name != 'confirm')
-		{
-			spr.playAnim('pressed');
-			spr.resetAnim = 0;
-		}
-		callOnScripts('onKeyPress', [key]);
-	}
-
-	public static function sortHitNotes(a:Note, b:Note):Int
-	{
-		if (a.lowPriority && !b.lowPriority)
-			return 1;
-		else if (!a.lowPriority && b.lowPriority)
-			return -1;
-
-		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
-	}
-
-	private function onKeyRelease(event:KeyboardEvent):Void
-	{
-		var eventKey:FlxKey = event.keyCode;
-		var key:Int = getKeyFromEvent(keysArray, eventKey);
-		if(!controls.controllerMode && key > -1) keyReleased(key);
-	}
-
-	private function keyReleased(key:Int)
-	{
-		if(cpuControlled || !startedCountdown || paused || key < 0 || key >= playerStrums.length) return;
-
-		var ret:Dynamic = callOnScripts('onKeyReleasePre', [key]);
-		if(ret == LuaUtils.Function_Stop) return;
-
-		var spr:StrumNote = playerStrums.members[key];
-		if(spr != null)
-		{
-			spr.playAnim('static');
-			spr.resetAnim = 0;
-		}
-		callOnScripts('onKeyRelease', [key]);
-	}
-
-	public static function getKeyFromEvent(arr:Array<String>, key:FlxKey):Int
-	{
-		if(key != NONE)
-		{
-			for (i in 0...arr.length)
-			{
-				var note:Array<FlxKey> = Controls.instance.keyboardBinds[arr[i]];
-				for (noteKey in note)
-					if(key == noteKey)
-						return i;
-			}
-		}
-		return -1;
-	}
-
-	// Hold notes
 	private function keysCheck():Void
 	{
-		// HOLDING
 		var holdArray:Array<Bool> = [];
 		var pressArray:Array<Bool> = [];
 		var releaseArray:Array<Bool> = [];
+		
 		for (key in keysArray)
 		{
 			holdArray.push(controls.pressed(key));
@@ -3128,7 +3017,75 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		// TO DO: Find a better way to handle controller inputs, this should work for now
+		#if TOUCH_CONTROLS
+		if (MusicBeatState.mobilec != null) 
+		{
+			if (MusicBeatState.customMode == 'HITBOX')
+			{
+				if (ClientPrefs.data.hitboxmode == 'Classic') {
+					var hboxOld = MusicBeatState.mobilec.hbox;
+					if (hboxOld != null) {
+						if (hboxOld.buttonLeft.justPressed)  pressArray[0] = true;
+						if (hboxOld.buttonLeft.pressed)      holdArray[0]  = true;
+						if (hboxOld.buttonLeft.justReleased) releaseArray[0] = true;
+
+						if (hboxOld.buttonDown.justPressed)  pressArray[1] = true;
+						if (hboxOld.buttonDown.pressed)      holdArray[1]  = true;
+						if (hboxOld.buttonDown.justReleased) releaseArray[1] = true;
+
+						if (hboxOld.buttonUp.justPressed)    pressArray[2] = true;
+						if (hboxOld.buttonUp.pressed)        holdArray[2]  = true;
+						if (hboxOld.buttonUp.justReleased)   releaseArray[2] = true;
+
+						if (hboxOld.buttonRight.justPressed) pressArray[3] = true;
+						if (hboxOld.buttonRight.pressed)     holdArray[3]  = true;
+						if (hboxOld.buttonRight.justReleased) releaseArray[3] = true;
+					}
+				}
+				else {
+					var hboxNew = MusicBeatState.mobilec.newhbox;
+					if (hboxNew != null) {
+						if (hboxNew.buttonLeft.justPressed)  pressArray[0] = true;
+						if (hboxNew.buttonLeft.pressed)      holdArray[0]  = true;
+						if (hboxNew.buttonLeft.justReleased) releaseArray[0] = true;
+
+						if (hboxNew.buttonDown.justPressed)  pressArray[1] = true;
+						if (hboxNew.buttonDown.pressed)      holdArray[1]  = true;
+						if (hboxNew.buttonDown.justReleased) releaseArray[1] = true;
+
+						if (hboxNew.buttonUp.justPressed)    pressArray[2] = true;
+						if (hboxNew.buttonUp.pressed)        holdArray[2]  = true;
+						if (hboxNew.buttonUp.justReleased)   releaseArray[2] = true;
+
+						if (hboxNew.buttonRight.justPressed) pressArray[3] = true;
+						if (hboxNew.buttonRight.pressed)     holdArray[3]  = true;
+						if (hboxNew.buttonRight.justReleased) releaseArray[3] = true;
+					}
+				}
+			} 
+			else if (MusicBeatState.mobilec.vpad != null) 
+			{
+				var vpad = MusicBeatState.mobilec.vpad;
+				
+				if (vpad.buttonLeft.justPressed)  pressArray[0] = true;
+				if (vpad.buttonLeft.pressed)      holdArray[0]  = true;
+				if (vpad.buttonLeft.justReleased) releaseArray[0] = true;
+
+				if (vpad.buttonDown.justPressed)  pressArray[1] = true;
+				if (vpad.buttonDown.pressed)      holdArray[1]  = true;
+				if (vpad.buttonDown.justReleased) releaseArray[1] = true;
+
+				if (vpad.buttonUp.justPressed)    pressArray[2] = true;
+				if (vpad.buttonUp.pressed)        holdArray[2]  = true;
+				if (vpad.buttonUp.justReleased)   releaseArray[2] = true;
+
+				if (vpad.buttonRight.justPressed) pressArray[3] = true;
+				if (vpad.buttonRight.pressed)     holdArray[3]  = true;
+				if (vpad.buttonRight.justReleased) releaseArray[3] = true;
+			}
+		}
+		#end
+
 		if((controls.controllerMode #if TOUCH_CONTROLS || true #end) && pressArray.contains(true))
 			for (i in 0...pressArray.length)
 				if(pressArray[i] && strumsBlocked[i] != true)
@@ -3137,7 +3094,7 @@ class PlayState extends MusicBeatState
 		if (startedCountdown && !inCutscene && !boyfriend.stunned && generatedMusic)
 		{
 			if (notes.length > 0) {
-				for (n in notes) { // I can't do a filter here, that's kinda awesome
+				for (n in notes) {
 					var canHit:Bool = (n != null && !strumsBlocked[n.noteData] && n.canBeHit
 						&& n.mustPress && !n.tooLate && !n.wasGoodHit && !n.blockHit);
 
@@ -3161,13 +3118,12 @@ class PlayState extends MusicBeatState
 			#end
 		}
 
-		// TO DO: Find a better way to handle controller inputs, this should work for now
-		if((controls.controllerMode || strumsBlocked.contains(true)) && releaseArray.contains(true))
+		if((controls.controllerMode || strumsBlocked.contains(true) #if TOUCH_CONTROLS || true #end) && releaseArray.contains(true))
 			for (i in 0...releaseArray.length)
 				if(releaseArray[i] || strumsBlocked[i] == true)
 					keyReleased(i);
 	}
-
+		
 	function noteMiss(daNote:Note):Void { //You didn't hit the key and let it go offscreen, also used by Hurt Notes
 		//Dupe note remove
 		notes.forEachAlive(function(note:Note) {
