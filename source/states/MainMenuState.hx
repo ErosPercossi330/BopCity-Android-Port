@@ -154,7 +154,7 @@ class MainMenuState extends MusicBeatState
 		penkaruTimeout += elapsed;
 		if (penkaruTimeout >= 4.0) penkaru = '';
 
-		if (controls.ACCEPT) {
+		if (controls.ACCEPT #if mobile || mobilePad.buttonA.justPressed #end) {
 			#if mobile
 			lime.app.Application.current.window.textInputEnabled = true;
 			
@@ -176,7 +176,7 @@ class MainMenuState extends MusicBeatState
 			i.setPosition(button.x, button.y);
 		}
 
-		if (controls.BACK) {
+		if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end) {
 			#if mobile
 			lime.app.Application.current.window.textInputEnabled = false;
 			if (openfl.Lib.current.stage.hasEventListener(openfl.events.TextEvent.TEXT_INPUT))
