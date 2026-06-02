@@ -637,6 +637,12 @@ class PlayState extends MusicBeatState
 		noteGroup.cameras = [camHUD];
 		comboGroup.cameras = [camHUD];
 
+		#if TOUCH_CONTROLS
+		addMobileControls();
+		MusicBeatState.mobilec.visible = false;
+		if (ClientPrefs.data.hitboxmode != 'Classic' && !ClientPrefs.data.hitboxhint) MusicBeatState.mobilec.alpha = 0.000001;
+		#end
+
 		startingSong = true;
 
 		#if LUA_ALLOWED
@@ -1037,6 +1043,10 @@ class PlayState extends MusicBeatState
 		var ret:Dynamic = callOnScripts('onStartCountdown', null, true);
 		if(ret != LuaUtils.Function_Stop) {
 			if (skipCountdown || startOnTime > 0) skipArrowStartTween = true;
+			#if TOUCH_CONTROLS
+			MusicBeatState.mobilec.visible = true;
+			if (MusicBeatState.data.checkHitbox != true) MusicBeatState.mobilec.alpha = ClientPrefs.data.mobilePadAlpha;
+			#end
 
 			generateStaticArrows(0);
 			generateStaticArrows(1);
@@ -1783,7 +1793,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if (controls.PAUSE && startedCountdown && canPause && !isDead)
+		if (controls.PAUSE #if TOUCH_CONTROLS || mobilePad.buttonP.justPressed #end && startedCountdown && canPause && !isDead)
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != LuaUtils.Function_Stop) {
@@ -2694,6 +2704,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		#if TOUCH_CONTROLS MusicBeatState.mobilec.visible = false; #end
 		timeBar.visible = false;
 		timeTxt.visible = false;
 		canPause = false;
