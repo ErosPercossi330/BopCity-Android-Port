@@ -87,39 +87,49 @@ class Controls
 	public var gamepadBinds:Map<String, Array<FlxGamepadInputID>>;
 
 	#if TOUCH_CONTROLS
-	public var trackedInputsUI:Array<Dynamic> = [];
-	public var trackedInputsNOTES:Array<Dynamic> = [];
+	// Maps an action name (e.g., 'ui_up') to an array of associated virtual buttons
+	public var trackedInputsUI:Map<String, Array<Dynamic>> = new Map<String, Array<Dynamic>>();
+	public var trackedInputsNOTES:Map<String, Array<Dynamic>> = new Map<String, Array<Dynamic>>();
 
 	public function addButtonNOTES(actionName:String, button:Dynamic, state:flixel.input.FlxInputState):Void
 	{
 		if (button == null) return;
-		trackedInputsNOTES.push(button);
+		if (!trackedInputsNOTES.exists(actionName)) {
+			trackedInputsNOTES.set(actionName, []);
+		}
+		if (!trackedInputsNOTES.get(actionName).contains(button)) {
+			trackedInputsNOTES.get(actionName).push(button);
+		}
 	}
 
 	public function addButtonUI(actionName:String, button:Dynamic, state:flixel.input.FlxInputState):Void
 	{
 		if (button == null) return;
-		trackedInputsUI.push(button);
+		if (!trackedInputsUI.exists(actionName)) {
+			trackedInputsUI.set(actionName, []);
+		}
+		if (!trackedInputsUI.get(actionName).contains(button)) {
+			trackedInputsUI.get(actionName).push(button);
+		}
 	}
 	
 	public function addHitboxNOTES(actionName:String, button:Dynamic, state:flixel.input.FlxInputState):Void
 	{
-		if (button == null) return;
-		trackedInputsNOTES.push(button);
+		addButtonNOTES(actionName, button, state);
 	}
 
 	public function setHitBox(Hitbox:Hitbox, HitboxOld:HitboxOld, state:FlxInputState):Void
 	{
 		if (ClientPrefs.data.hitboxmode == 'Classic') {
-			addHitboxNOTES('note_up', HitboxOld.buttonUp, state);
-			addHitboxNOTES('note_down', HitboxOld.buttonDown, state);
 			addHitboxNOTES('note_left', HitboxOld.buttonLeft, state);
+			addHitboxNOTES('note_down', HitboxOld.buttonDown, state);
+			addHitboxNOTES('note_up', HitboxOld.buttonUp, state);
 			addHitboxNOTES('note_right', HitboxOld.buttonRight, state);
 		}
 		else {
-			addHitboxNOTES('note_up', Hitbox.buttonUp, state);
-			addHitboxNOTES('note_down', Hitbox.buttonDown, state);
 			addHitboxNOTES('note_left', Hitbox.buttonLeft, state);
+			addHitboxNOTES('note_down', Hitbox.buttonDown, state);
+			addHitboxNOTES('note_up', Hitbox.buttonUp, state);
 			addHitboxNOTES('note_right', Hitbox.buttonRight, state);
 		}
 	}
@@ -206,9 +216,9 @@ class Controls
 				 addButtonNOTES('note_right', MobilePad.buttonRight2, state);
 			case "NONE": // do nothing
 			default:
-				 addButtonNOTES('note_up', MobilePad.buttonUp, state);
-				 addButtonNOTES('note_down', MobilePad.buttonDown, state);
 				 addButtonNOTES('note_left', MobilePad.buttonLeft, state);
+				 addButtonNOTES('note_down', MobilePad.buttonDown, state);
+				 addButtonNOTES('note_up', MobilePad.buttonUp, state);
 				 addButtonNOTES('note_right', MobilePad.buttonRight, state);
 		}
 
