@@ -44,11 +44,6 @@ class MusicBeatState extends FlxUIState
 		mobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
-	public function removeMobilePad() {
-		if (mobilePad != null)
-			remove(mobilePad);
-	}
-
 	public function removeMobileControls() {
 		if (mobilec != null)
 			remove(mobilec);
