@@ -23,6 +23,7 @@ class MusicBeatState extends FlxUIState
 	}
 
     #if TOUCH_CONTROLS
+	public static var checkHitbox:Bool = false; 
 	public var mobilePad:MobilePad;
 	public static var mobilec:MobileControls;
 
@@ -36,17 +37,27 @@ class MusicBeatState extends FlxUIState
 		mobilePad = new MobilePad(DPad, Action);
 		add(mobilePad);
 
-		controls.trackedInputsUI.clear(); 
+		controls.trackedInputsUI.clear();
 		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
+
 		trackedinputsUI = controls.trackedInputsUI;
-		
 		mobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
-	public function addMobileControls() {
+	public function removeMobilePad() {
+		if (mobilePad != null)
+			remove(mobilePad);
+	}
+
+	public function removeMobileControls() {
+		if (mobilec != null)
+			remove(mobilec);
+	}
+	
+	public function addMobileControls(?customControllerValue:Int, ?mode:String, ?action:String) {
 		controls.trackedInputsNOTES.clear();
 		
-		mobilec = new MobileControls();
+		mobilec = new MobileControls(); 
 
 		switch (MobileControls.mode)
 		{
