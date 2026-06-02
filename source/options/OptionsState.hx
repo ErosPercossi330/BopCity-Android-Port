@@ -91,7 +91,6 @@ class OptionsState extends MusicBeatState
 		ClientPrefs.saveSettings();
 		#if TOUCH_CONTROLS
 		removeMobilePad();
-		addMobilePad("UP_DOWN", "A_B_C");
 		persistentUpdate = true;
 		#end
 		#if DISCORD_ALLOWED
