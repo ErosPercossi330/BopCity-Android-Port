@@ -134,7 +134,10 @@ class SkibidiGameOver extends MusicBeatSubstate
 		PlayState.instance.setOnScripts('inGameOver', true);
 		PlayState.instance.callOnScripts('onGameOverStart', []);
 		
-
+		#if TOUCH_CONTROLS
+        addMobilePad("NONE", "A_B");
+        #end
+			
 		super.create();
 	}
 
@@ -153,12 +156,12 @@ class SkibidiGameOver extends MusicBeatSubstate
 		FlxG.camera.snapToTarget();
 		PlayState.instance.callOnScripts('onUpdate', [elapsed]);
 
-		if (controls.ACCEPT)
+		if (controls.ACCEPT #if mobile || mobilePad.buttonA.justPressed #end)
 		{
 			endBullshit();
 		}
 
-		if (controls.BACK)
+		if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end)
 		{
 			#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 			FlxG.sound.music.stop();
