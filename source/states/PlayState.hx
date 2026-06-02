@@ -3129,7 +3129,7 @@ class PlayState extends MusicBeatState
 		#if TOUCH_CONTROLS
 		if (MusicBeatState.mobilec != null) 
 		{
-			if (MusicBeatState.customMode == 'HITBOX')
+			if (MusicBeatState.checkHitbox) 
 			{
 				if (ClientPrefs.data.hitboxmode == 'Classic') {
 					var hboxOld = MusicBeatState.mobilec.hbox;
