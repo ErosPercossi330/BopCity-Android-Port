@@ -134,6 +134,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		#if TOUCH_CONTROLS
         addMobilePad("FULL", "A_B");
+		addMobilePadCamera();
         #end
 		super.create();
 	}
@@ -311,6 +312,16 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.chartingMode = false;
 					FlxG.camera.followLerp = 0;
 			}
+		}
+
+        if (mobilePad == null)
+		{
+			{
+				addMobilePad("UP_DOWN", "A");
+				mobilePad.buttonDown.color = 0xFF00FFFF;
+				mobilePad.buttonUp.color = 0xFF12FA05;
+			}
+			addMobilePadCamera();
 		}
 	}
 
