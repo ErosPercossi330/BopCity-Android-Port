@@ -27,40 +27,24 @@ class MusicBeatSubstate extends FlxSubState
 		return Controls.instance;
 
 	#if TOUCH_CONTROLS
-	public static var checkHitbox:Bool = false;
 	public var mobilePad:MobilePad;
 	public static var mobilec:MobileControls;
 
 	var trackedinputsUI:Map<String, Array<Dynamic>>;
 	var trackedinputsNOTES:Map<String, Array<Dynamic>>;
 
-	public function addMobileControls(?customControllerValue:Int, ?mode:String, ?action:String) {
-		controls.trackedInputsNOTES.clear();
-		
-		mobilec = new MobileControls(customControllerValue, mode, action); 
+	public function addMobilePad(?DPad:String, ?Action:String) {
+		if (mobilePad != null)
+			removeMobilePad();
 
-		switch (MobileControls.mode)
-		{
-			case MOBILEPAD_RIGHT | MOBILEPAD_LEFT | MOBILEPAD_CUSTOM:
-				controls.setMobilePadNOTES(mobilec.vpad, "FULL", "NONE", PRESSED);
-				MusicBeatState.checkHitbox = false;
-			case DUO:
-				controls.setMobilePadNOTES(mobilec.vpad, "DUO", "NONE", PRESSED);
-				MusicBeatState.checkHitbox = false;
-			case HITBOX:
-				controls.setHitBox(mobilec.newhbox, mobilec.hbox, PRESSED);
-				MusicBeatState.checkHitbox = true;
-			default:
-		}
+		mobilePad = new MobilePad(DPad, Action);
+		add(mobilePad);
 
-		trackedinputsNOTES = controls.trackedInputsNOTES;
+		controls.trackedInputsUI.clear();
+		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
 
-		var camcontrol = new flixel.FlxCamera();
-		FlxG.cameras.add(camcontrol, false);
-		camcontrol.bgColor.alpha = 0;
-		mobilec.cameras = [camcontrol];
-
-		add(mobilec);
+		trackedinputsUI = controls.trackedInputsUI;
+		mobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
 	public function removeMobilePad() {
