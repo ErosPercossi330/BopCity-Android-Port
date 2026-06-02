@@ -2,11 +2,16 @@ package mobile.substates;
 
 import flixel.effects.FlxFlicker;
 import flixel.addons.transition.FlxTransitionableState;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.text.FlxText;
+import flixel.FlxSprite;
+import flixel.util.FlxColor;
+import flixel.group.FlxSpriteGroup;
 
 class MobileExtraControl extends MusicBeatSubstate
 {
 	var returnArray:Array<Array<String>> = [
-		['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'G', 'K', 'L', 'M'],
+		['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'],
 		['N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
 		['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'],
 		['ZERO', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE'],
@@ -14,7 +19,7 @@ class MobileExtraControl extends MusicBeatSubstate
 	];
 
 	var displayArray:Array<Array<String>> = [
-		['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'G', 'K', 'L', 'M'],
+		['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'],
 		['N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
 		['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'],
 		['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
@@ -50,9 +55,11 @@ class MobileExtraControl extends MusicBeatSubstate
 		add(titleTeam);
 
 		for (i in 1...5){
-			var data:String = Reflect.field(ClientPrefs, "extraKeyReturn" + i);
+			var data:Dynamic = Reflect.field(ClientPrefs.data, "extraKeyReturn" + i);
+			if (data == null) data = "SPACE"; 
+			
 			var _x = FlxG.width / 2 + 25 + (titleWidth + 50) * ((i-1) - 4 / 2);
-			var titleObject = new ChooseButton(_x, 150, titleWidth, titleHeight, data, "Key " + Std.string(i));
+			var titleObject = new ChooseButton(_x, 150, titleWidth, titleHeight, Std.string(data), "Key " + Std.string(i));
 			titleTeam.add(titleObject);
 		}
 
@@ -153,10 +160,10 @@ class MobileExtraControl extends MusicBeatSubstate
 		}
 		if (reset){
 			FlxG.sound.play(Paths.sound('cancelMenu'));
-			ClientPrefs.data.extraKeyReturn1 = ClientPrefs.data.extraKeyReturn1;
-			ClientPrefs.data.extraKeyReturn2 = ClientPrefs.data.extraKeyReturn2;
-			ClientPrefs.data.extraKeyReturn3 = ClientPrefs.data.extraKeyReturn3;
-			ClientPrefs.data.extraKeyReturn4 = ClientPrefs.data.extraKeyReturn4;
+			ClientPrefs.data.extraKeyReturn1 = 'SPACE';
+			ClientPrefs.data.extraKeyReturn2 = 'SPACE';
+			ClientPrefs.data.extraKeyReturn3 = 'SPACE';
+			ClientPrefs.data.extraKeyReturn4 = 'SPACE';
 			resetTitle();
 		}
 	}
@@ -185,7 +192,7 @@ class MobileExtraControl extends MusicBeatSubstate
 	function updateTitle(number:Int = 0, changeBG:Bool = false, soundsType:Int = 0, needFlicker:Bool = false){
 		switch(soundsType)
 		{
-			case 0: //nothing happened
+			case 0: 
 			case 1:
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 			case 2:
@@ -197,7 +204,10 @@ class MobileExtraControl extends MusicBeatSubstate
 			var title:ChooseButton = titleTeam.members[i];
 
 			if (i == titleNum){
-				title.changeExtraText(Reflect.field(ClientPrefs, "extraKeyReturn" + number));
+				var data:Dynamic = Reflect.field(ClientPrefs.data, "extraKeyReturn" + number);
+				if (data == null) data = "SPACE";
+				
+				title.changeExtraText(Std.string(data));
 				if (needFlicker) FlxFlicker.flicker(title, 0.6, 0.075, true, true);
 				if (changeBG) title.changeColor(FlxColor.WHITE);
 			} else {
@@ -211,7 +221,10 @@ class MobileExtraControl extends MusicBeatSubstate
 		{
 			var title:ChooseButton = titleTeam.members[i];
 			var number = i + 1;
-			title.changeExtraText(Reflect.field(ClientPrefs, "extraKeyReturn" + number));
+			var data:Dynamic = Reflect.field(ClientPrefs.data, "extraKeyReturn" + number);
+			if (data == null) data = "SPACE";
+			
+			title.changeExtraText(Std.string(data));
 		}
 	}
 }
@@ -232,7 +245,9 @@ class ChooseButton extends FlxSpriteGroup
 		bg.scrollFactor.set();
 		add(bg);
 
-		titleObject = new FlxText(0, 0, width, title);
+		var safeTitle:String = (title != null) ? title : "NONE";
+
+		titleObject = new FlxText(0, 0, width, safeTitle);
 		titleObject.setFormat("VCR OSD Mono", 20, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		titleObject.antialiasing = ClientPrefs.data.antialiasing;
 		titleObject.borderSize = 2;
@@ -259,6 +274,6 @@ class ChooseButton extends FlxSpriteGroup
 	}
 
 	public function changeExtraText(text:String){
-		titleObject.text = text;
+		titleObject.text = (text != null) ? text : "NONE";
 	}
 }
