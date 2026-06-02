@@ -186,7 +186,6 @@ class Main extends Sprite
 
 		if (!isThere) {
 			FlxG.stage.window.alert('im gonna crash out.','Hummus Missing');
-			Sys.exit(0);
 		}
 
 	}
