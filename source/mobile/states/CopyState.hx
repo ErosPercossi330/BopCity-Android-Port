@@ -22,7 +22,6 @@
 
 package mobile.states;
 
-#if mobile
 import states.TitleState;
 import lime.utils.Assets as LimeAssets;
 import openfl.utils.Assets as OpenFLAssets;
@@ -241,4 +240,3 @@ class CopyState extends MusicBeatState
 		return (maxLoopTimes <= 0);
 	}
 }
-#end
