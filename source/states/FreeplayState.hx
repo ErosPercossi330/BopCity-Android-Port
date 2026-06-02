@@ -291,7 +291,7 @@ class FreeplayState extends MusicBeatState
 			}
 		}
 
-		if (controls.BACK)
+		if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end)
 		{
 			if (player.playingMusic)
 			{
@@ -363,7 +363,7 @@ class FreeplayState extends MusicBeatState
 				player.pauseOrResume(player.paused);
 			}
 		}
-		else if (controls.ACCEPT && !player.playingMusic #if mobile || mobilePad.buttonA.justPressed #end)
+		else if (controls.ACCEPT && !player.playingMusic #if mobile && mobilePad.buttonA.justPressed #end)
 		{
 			persistentUpdate = false;
 			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
