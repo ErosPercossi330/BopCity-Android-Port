@@ -242,6 +242,29 @@ class Controls
 		var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
 		if(result) controllerMode = false;
 
+		#if TOUCH_CONTROLS
+		if (!result) {
+			for (btn in trackedInputsUI) {
+				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_PRESSED) {
+					if ((key == 'ui_up' && btn == MobilePad.buttonUp) ||
+						(key == 'ui_down' && btn == MobilePad.buttonDown) ||
+						(key == 'ui_left' && btn == MobilePad.buttonLeft) ||
+						(key == 'ui_right' && btn == MobilePad.buttonRight) ||
+						(key == 'accept' && btn == MobilePad.buttonA) ||
+						(key == 'back' && btn == MobilePad.buttonB) ||
+						(key == 'pause' && btn == MobilePad.buttonP)) {
+						result = true;
+					}
+				}
+			}
+			for (btn in trackedInputsNOTES) {
+				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_PRESSED) {
+					result = true; 
+				}
+			}
+		}
+		#end
+
 		return result || _myGamepadJustPressed(gamepadBinds[key]) == true;
 	}
 
@@ -250,6 +273,21 @@ class Controls
 		var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
 		if(result) controllerMode = false;
 
+		#if TOUCH_CONTROLS
+		if (!result) {
+			for (btn in trackedInputsUI) {
+				if (btn != null && (btn.current == flixel.input.FlxInputState.PRESSED || btn.current == flixel.input.FlxInputState.JUST_PRESSED)) {
+					result = true;
+				}
+			}
+			for (btn in trackedInputsNOTES) {
+				if (btn != null && (btn.current == flixel.input.FlxInputState.PRESSED || btn.current == flixel.input.FlxInputState.JUST_PRESSED)) {
+					result = true;
+				}
+			}
+		}
+		#end
+
 		return result || _myGamepadPressed(gamepadBinds[key]) == true;
 	}
 
@@ -257,6 +295,21 @@ class Controls
 	{
 		var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
 		if(result) controllerMode = false;
+
+		#if TOUCH_CONTROLS
+		if (!result) {
+			for (btn in trackedInputsUI) {
+				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_RELEASED) {
+					result = true;
+				}
+			}
+			for (btn in trackedInputsNOTES) {
+				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_RELEASED) {
+					result = true;
+				}
+			}
+		}
+		#end
 
 		return result || _myGamepadJustReleased(gamepadBinds[key]) == true;
 	}
