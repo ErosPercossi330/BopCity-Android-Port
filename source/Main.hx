@@ -125,7 +125,7 @@ class Main extends Sprite
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-		var initialState:Class<flixel.FlxState> = Main;
+		var initialState:Class<flixel.FlxState> = TitleState;
 		#if mobile
 		if (!CopyState.checkExistingFiles()) {
 			initialState = CopyState;
