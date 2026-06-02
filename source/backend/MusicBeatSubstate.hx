@@ -27,29 +27,28 @@ class MusicBeatSubstate extends FlxSubState
 		return Controls.instance;
 
 	#if TOUCH_CONTROLS
-	public var mobilePad:MobilePad; //this will be changed later
+	public var mobilePad:MobilePad;
 	public static var mobilec:MobileControls;
-	var trackedinputsUI:Array<FlxActionInput> = [];
-	var trackedinputsNOTES:Array<FlxActionInput> = [];
+	var trackedinputsUI:Array<Dynamic> = [];
+	var trackedinputsNOTES:Array<Dynamic> = [];
 
 	public function addMobilePad(?DPad:String, ?Action:String) {
+		if (mobilePad != null)
+			removeMobilePad();
+
 		mobilePad = new MobilePad(DPad, Action);
 		add(mobilePad);
-		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
-		
-		trackedinputsUI = [for (input in controls.trackedInputsUI) (input : FlxActionInput)];
+
 		controls.trackedInputsUI = [];
+		controls.setMobilePadUI(mobilePad, DPad, Action, PRESSED);
+		trackedinputsUI = controls.trackedInputsUI;
 		
 		mobilePad.alpha = ClientPrefs.data.mobilePadAlpha;
 	}
 
-	/*
-	public function addVirtualPad(?DPad:String, ?Action:String) {
-		return addMobilePad(DPad, Action);
-	}
-	*/
-
 	public function addMobileControls() {
+		controls.trackedInputsNOTES = [];
+		
 		mobilec = new MobileControls();
 
 		switch (MobileControls.mode)
@@ -66,7 +65,7 @@ class MusicBeatSubstate extends FlxSubState
 			default:
 		}
 
-		trackedinputsNOTES = [for (input in controls.trackedInputsNOTES) (input : FlxActionInput)];
+		trackedinputsNOTES = controls.trackedInputsNOTES;
 
 		var camcontrol = new flixel.FlxCamera();
 		FlxG.cameras.add(camcontrol, false);
@@ -91,14 +90,6 @@ class MusicBeatSubstate extends FlxSubState
 		mobilePad.cameras = [camcontrol];
 	}
 
-	/*
-	public function removeVirtualPad()
-		return removeMobilePad();
-
-	public function addVirtualPadCamera()
-		return addMobilePadCamera();
-	*/
-
 	override function destroy() {
 		if (trackedinputsNOTES.length > 0)
 			controls.removeVirtualControlsInput(trackedinputsNOTES);
@@ -113,6 +104,9 @@ class MusicBeatSubstate extends FlxSubState
 			
 		if (mobilec != null)
 			mobilec = FlxDestroyUtil.destroy(mobilec);
+
+		controls.trackedInputsUI = [];
+		controls.trackedInputsNOTES = [];
 	}
 	#end
 
