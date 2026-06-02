@@ -110,6 +110,11 @@ class ControlsSubState extends MusicBeatSubstate
 		add(text);
 
 		createTexts();
+		
+		#if TOUCH_CONTROLS
+		addMobilePad("FULL", "A_B");
+		addMobilePadCamera();
+		#end
 	}
 
 	var lastID:Int = 0;
