@@ -293,7 +293,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 	function bindingKeyUpdate(elapsed:Float)
 	{
-		if(FlxG.keys.pressed.ESCAPE || FlxG.gamepads.anyPressed(B))
+		if(FlxG.keys.pressed.ESCAPE || FlxG.gamepads.anyPressed(B) #if mobile || mobilePad.buttonB.justPressed #end)
 		{
 			holdingEsc += elapsed;
 			if(holdingEsc > 0.5)
@@ -320,17 +320,17 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			var changed:Bool = false;
 			if(!controls.controllerMode)
 			{
-				if(FlxG.keys.justPressed.ANY || FlxG.keys.justReleased.ANY)
+				if(FlxG.keys.justPressed.ANY || FlxG.keys.justReleased.ANY #if mobile || mobilePad.buttonA.justPressed #end)
 				{
 					var keyPressed:FlxKey = cast (FlxG.keys.firstJustPressed(), FlxKey);
 					var keyReleased:FlxKey = cast (FlxG.keys.firstJustReleased(), FlxKey);
 
-					if(keyPressed != NONE && keyPressed != ESCAPE && keyPressed != BACKSPACE)
+					if(keyPressed != NONE && keyPressed != ESCAPE && keyPressed != BACKSPACE #if mobile || mobilePad.buttonA.justPressed #end)
 					{
 						changed = true;
 						curOption.keys.keyboard = keyPressed;
 					}
-					else if(keyReleased != NONE && (keyReleased == ESCAPE || keyReleased == BACKSPACE))
+					else if(keyReleased != NONE && (keyReleased == ESCAPE || keyReleased == BACKSPACE) #if mobile || mobilePad.buttonA.justReleased #end)
 					{
 						changed = true;
 						curOption.keys.keyboard = keyReleased;
