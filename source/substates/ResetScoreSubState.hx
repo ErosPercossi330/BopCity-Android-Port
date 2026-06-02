@@ -70,6 +70,9 @@ class ResetScoreSubState extends MusicBeatSubstate
 		noText.x += 200;
 		add(noText);
 		updateOptions();
+		#if TOUCH_CONTROLS
+        addMobilePad("LEFT_RIGHT", "A_B");
+        #end
 	}
 
 	override function update(elapsed:Float)
@@ -83,15 +86,15 @@ class ResetScoreSubState extends MusicBeatSubstate
 		}
 		if(week == -1) icon.alpha += elapsed * 2.5;
 
-		if(controls.UI_LEFT_P || controls.UI_RIGHT_P) {
+		if(controls.UI_LEFT_P || controls.UI_RIGHT_P #if mobile || mobilePad.buttonLeft.justPressed || mobilePad.buttonRight.justPressed #end) {
 			FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 			onYes = !onYes;
 			updateOptions();
 		}
-		if(controls.BACK) {
+		if(controls.BACK #if mobile || mobilePad.buttonB.justPressed #end) {
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
 			close();
-		} else if(controls.ACCEPT) {
+		} else if(controls.ACCEPT #if mobile || mobilePad.buttonA.justPressed #end) {
 			if(onYes) {
 				if(week == -1) {
 					Highscore.resetSong(song, difficulty);
