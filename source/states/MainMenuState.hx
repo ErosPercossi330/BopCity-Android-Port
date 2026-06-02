@@ -156,7 +156,7 @@ class MainMenuState extends MusicBeatState
 
 		if (controls.ACCEPT) {
 			#if mobile
-			lime.system.System.textInputEnabled = true;
+			lime.app.Application.current.window.textInputEnabled = true;
 			
 			if (openfl.Lib.current.stage.hasEventListener(openfl.events.TextEvent.TEXT_INPUT))
 				openfl.Lib.current.stage.removeEventListener(openfl.events.TextEvent.TEXT_INPUT, onMobileInput);
@@ -178,7 +178,7 @@ class MainMenuState extends MusicBeatState
 
 		if (controls.BACK) {
 			#if mobile
-			lime.system.System.textInputEnabled = true;
+			lime.app.Application.current.window.textInputEnabled = false;
 			if (openfl.Lib.current.stage.hasEventListener(openfl.events.TextEvent.TEXT_INPUT))
 				openfl.Lib.current.stage.removeEventListener(openfl.events.TextEvent.TEXT_INPUT, onMobileInput);
 			#end
@@ -208,7 +208,7 @@ class MainMenuState extends MusicBeatState
 			FlxG.sound.play(flixel.system.FlxAssets.getSound('assets/sounds/tts/${letter.toLowerCase()}'));
 
 		if (penkaru == 'FAT' && !fatMode) {
-			#if mobile lime.system.System.textInputEnabled = true; #end
+			#if mobile lime.app.Application.current.window.textInputEnabled = false; #end
 			for (i in 0...buttons.length) {
 				var og = buttons.members[i];
 				var video = new VideoSprite();
@@ -227,7 +227,7 @@ class MainMenuState extends MusicBeatState
 		}
 
 		if (penkaru == 'PENKARU') {
-			#if mobile lime.system.System.textInputEnabled = true; #end
+			#if mobile lime.app.Application.current.window.textInputEnabled = false; #end
 			Misc.isPenthosUnlocked = true;
 			final ding = flixel.system.FlxAssets.getSound('assets/sounds/ding');
 			(FlxG.sound.play(ding)).onComplete = () -> {
