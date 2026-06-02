@@ -76,8 +76,7 @@ class MobileExtraControl extends MusicBeatSubstate
 		}
 
 		updateTitle(titleNum + 1, true, 0);
-
-		addMobilePad("UP_DOWN", "OptionsC");
+		addMobilePad("FULL", "OptionsC");
 		addMobilePadCamera();
 
 		super.create();
@@ -86,14 +85,31 @@ class MobileExtraControl extends MusicBeatSubstate
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		var padUp:Bool = false;
+		var padDown:Bool = false;
+		var padLeft:Bool = false;
+		var padRight:Bool = false;
+		var padAccept:Bool = false;
+		var padBack:Bool = false;
+		var padReset:Bool = false;
 
-		var accept = controls.ACCEPT;
-		var right = controls.UI_RIGHT_P;
-		var left = controls.UI_LEFT_P;
-		var up = controls.UI_UP_P;
-		var down = controls.UI_DOWN_P;
-		var back = controls.BACK;
-		var reset = controls.RESET || (mobilePad != null && mobilePad.buttonC.justPressed);
+		if (mobilePad != null) {
+			padUp = mobilePad.buttonUp.justPressed;
+			padDown = mobilePad.buttonDown.justPressed;
+			padLeft = mobilePad.buttonLeft.justPressed;
+			padRight = mobilePad.buttonRight.justPressed;
+			padAccept = mobilePad.buttonA.justPressed;
+			padBack = mobilePad.buttonB.justPressed;
+			padReset = mobilePad.buttonC.justPressed;
+		}
+
+		var accept = controls.ACCEPT || padAccept;
+		var right = controls.UI_RIGHT_P || padRight;
+		var left = controls.UI_LEFT_P || padLeft;
+		var up = controls.UI_UP_P || padUp;
+		var down = controls.UI_DOWN_P || padDown;
+		var back = controls.BACK || padBack;
+		var reset = controls.RESET || padReset;
 
 		if (left || right){
 			if (isMain){
