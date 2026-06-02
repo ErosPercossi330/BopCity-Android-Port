@@ -67,7 +67,11 @@ class GriddyGameover extends MusicBeatSubstate
         PlayState.instance.camHUD.visible = false;
 		PlayState.instance.setOnScripts('inGameOver', true);
 		PlayState.instance.callOnScripts('onGameOverStart', []);
-		
+
+		#if TOUCH_CONTROLS
+        addMobilePad("NONE", "B");
+        #end
+			
 		super.create();
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length-1]];
 	}
@@ -85,7 +89,7 @@ class GriddyGameover extends MusicBeatSubstate
 		// 	endBullshit();
 		// }
 
-		if (controls.BACK)
+		if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end)
 		{
 			#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 			FlxG.sound.music.stop();
