@@ -138,10 +138,10 @@ class ReflectionFunctions
 			var myClass:Dynamic = Type.resolveClass(classVar);
 			#elseif TOUCH_CONTROLS
 			var myClass:Dynamic = classCheck(classVar);
-			var variableplus:String = varCheck(myClass, variable);
 			#end
 			var killMe:Array<String> = variable.split('.');
 			#if TOUCH_CONTROLS
+			var variableplus:String = varCheck(myClass, variable);
 			if (MusicBeatState.mobilec != null && myClass == 'flixel.FlxG' && variableplus.indexOf('key') != -1){
 				var check:Dynamic;
 				check = specialKeyCheck(variableplus); //fuck you old lua 🙃
