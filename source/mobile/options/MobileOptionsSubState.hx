@@ -48,8 +48,8 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		option = new Option('MobilePad Alpha:',
 			'Changes MobilePad Alpha -cool feature',
 			'mobilePadAlpha',
-			'percent',
-			0.6);
+			'percent');
+		option.defaultValue = 0.6;
 		option.scrollSpeed = 1.6;
 		option.minValue = 0;
 		option.maxValue = 1;
@@ -64,8 +64,8 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		option = new Option('Extra Controls',
 			"Allow Extra Controls",
 			'extraKeys',
-			'float',
-			2);
+			'float');
+		option.defaultValue = 2;
 		option.scrollSpeed = 1.6;
 		option.minValue = 0;
 		option.maxValue = 4;
@@ -77,8 +77,8 @@ class MobileOptionsSubState extends BaseOptionsMenu
 			"Choose Extra Control Location",
 			'hitboxLocation',
 			'string',
-			'Bottom',
 			['Bottom', 'Top', 'Middle']);
+		option.defaultValue = 'Bottom';
 		addOption(option);
 
 		if(HitboxTypes == null) HitboxTypes = [];
@@ -89,30 +89,30 @@ class MobileOptionsSubState extends BaseOptionsMenu
 			"Choose your Hitbox Style! -mariomaster",
 			'hitboxmode',
 			'string',
-			'New',
 			HitboxTypes);
+		option.defaultValue = 'New';
 		addOption(option);
 
 		option = new Option('Hitbox Design:',
 			"Choose how your hitbox should look like.",
 			'hitboxtype',
 			'string',
-			'Gradient',
 			['Gradient', 'No Gradient' , 'No Gradient (Old)']);
+		option.defaultValue = 'Gradient';
 		addOption(option);
 
 		option = new Option('Hitbox Hint',
 			'Hitbox Hint -I hate this',
 			'hitboxhint',
-			'bool',
-			false);
+			'bool');
+		option.defaultValue = false;
 		addOption(option);
 
 		option = new Option('Hitbox Opacity', 
 			'Changes hitbox opacity -omg',
 			'hitboxalpha',
-			'float',
-			0.7);
+			'float');
+		option.defaultValue = 0.7;
 		option.scrollSpeed = 1.6;
 		option.minValue = 0.0;
 		option.maxValue = 1;
@@ -125,8 +125,8 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		option = new Option('Wide Screen Mode',
 			'If checked, The game will stretch to fill your whole screen. (WARNING: Can result in bad visuals & break some mods that resizes the game/cameras)',
 			'wideScreen',
-			'bool',
-			false);
+			'bool');
+		option.defaultValue = false;
 		option.onChange = () -> FlxG.scaleMode = new MobileScaleMode();
 		addOption(option);
 		#end
@@ -136,8 +136,8 @@ class MobileOptionsSubState extends BaseOptionsMenu
 			'Which folder Psych Engine should use?',
 			'storageType',
 			'string',
-			null,
 			storageTypes);
+		option.defaultValue = storageTypes[0];
 		addOption(option);
 		#end
 
