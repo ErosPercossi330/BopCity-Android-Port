@@ -5,24 +5,36 @@ import backend.StageData;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
+	var options:Array<String> = ['Note Colors', #if TOUCH_CONTROLS 'Mobile Controls' #else 'Controls' #end, 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'];
 	private var grpOptions:FlxTypedGroup<PapyrusText>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 	public static var onPlayState:Bool = false;
 
 	function openSelectedSubstate(label:String) {
+		#if TOUCH_CONTROLS
+	    persistentUpdate = false;
+	    if (label != "Adjust Delay and Combo") removeMobilePad();
+	    #end
 		switch(label) {
 			case 'Note Colors':
 				openSubState(new options.NotesSubState());
 			case 'Controls':
 				openSubState(new options.ControlsSubState());
+			#if TOUCH_CONTROLS
+			case 'Mobile Controls':
+    			openSubState(new MobileControlSelectSubState());
+    		#end
 			case 'Graphics':
 				openSubState(new options.GraphicsSettingsSubState());
 			case 'Visuals and UI':
 				openSubState(new options.VisualsUISubState());
 			case 'Gameplay':
 				openSubState(new options.GameplaySettingsSubState());
+			#if (TOUCH_CONTROLS || mobile)
+			case 'Mobile Options':
+			    openSubState(new MobileOptionsSubState());
+			#end
 			case 'Adjust Delay and Combo':
 				MusicBeatState.switchState(new options.NoteOffsetState());
 		}
@@ -67,12 +79,21 @@ class OptionsState extends MusicBeatState
 		changeSelection();
 		ClientPrefs.saveSettings();
 
+		#if TOUCH_CONTROLS
+		addMobilePad("UP_DOWN", "A_B_C");
+		#end
+			
 		super.create();
 	}
 
 	override function closeSubState() {
 		super.closeSubState();
 		ClientPrefs.saveSettings();
+		#if TOUCH_CONTROLS
+		removeMobilePad();
+		addMobilePad("UP_DOWN", "A_B_C");
+		persistentUpdate = true;
+		#end
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Options Menu", null);
 		#end
@@ -98,6 +119,13 @@ class OptionsState extends MusicBeatState
 			}
 			else MusicBeatState.switchState(new MainMenuState());
 		}
+		#if TOUCH_CONTROLS
+		if (mobilePad.buttonC.justPressed) {
+			removeMobilePad();
+			persistentUpdate = false;
+			openSubState(new MobileExtraControl());
+		}
+		#end
 		else if (controls.ACCEPT) openSelectedSubstate(options[curSelected]);
 	}
 	
