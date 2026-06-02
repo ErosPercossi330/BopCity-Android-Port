@@ -314,6 +314,7 @@ class PauseSubState extends MusicBeatSubstate
 			}
 		}
 
+        #if TOUCH_CONTROLS
         if (mobilePad == null)
 		{
 			{
@@ -323,6 +324,7 @@ class PauseSubState extends MusicBeatSubstate
 			}
 			addMobilePadCamera();
 		}
+        #end
 	}
 
 	function deleteSkipTimeText()
