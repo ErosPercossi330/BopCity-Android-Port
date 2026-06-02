@@ -246,15 +246,7 @@ class Controls
 		if (!result) {
 			for (btn in trackedInputsUI) {
 				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_PRESSED) {
-					if ((key == 'ui_up' && btn == MobilePad.buttonUp) ||
-						(key == 'ui_down' && btn == MobilePad.buttonDown) ||
-						(key == 'ui_left' && btn == MobilePad.buttonLeft) ||
-						(key == 'ui_right' && btn == MobilePad.buttonRight) ||
-						(key == 'accept' && btn == MobilePad.buttonA) ||
-						(key == 'back' && btn == MobilePad.buttonB) ||
-						(key == 'pause' && btn == MobilePad.buttonP)) {
-						result = true;
-					}
+					result = true;
 				}
 			}
 			for (btn in trackedInputsNOTES) {
