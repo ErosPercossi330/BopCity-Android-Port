@@ -103,6 +103,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		changeSelection();
 		reloadCheckboxes();
+
+		#if TOUCH_CONTROLS
+		addMobilePad("FULL", "A_B_C");
+		#end
 	}
 
 	public function addOption(option:Option) {
