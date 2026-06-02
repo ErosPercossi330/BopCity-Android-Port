@@ -254,14 +254,32 @@ class Controls
 
 		#if TOUCH_CONTROLS
 		if (!result) {
-			for (btn in trackedInputsUI) {
-				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_PRESSED) {
-					result = true;
+			if (trackedInputsUI.exists(key)) {
+				for (btn in trackedInputsUI.get(key)) {
+					if (btn != null && btn.justPressed) {
+						result = true;
+						break;
+					}
 				}
 			}
-			for (btn in trackedInputsNOTES) {
-				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_PRESSED) {
-					result = true; 
+			if (!result && trackedInputsNOTES.exists(key)) {
+				for (btn in trackedInputsNOTES.get(key)) {
+					if (btn != null && btn.justPressed) {
+						result = true;
+						break;
+					}
+				}
+			}
+			
+			if (!result && key.startsWith('note_')) {
+				var fallbackKey:String = key.replace('note_', 'ui_');
+				if (trackedInputsUI.exists(fallbackKey)) {
+					for (btn in trackedInputsUI.get(fallbackKey)) {
+						if (btn != null && btn.justPressed) {
+							result = true;
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -277,14 +295,31 @@ class Controls
 
 		#if TOUCH_CONTROLS
 		if (!result) {
-			for (btn in trackedInputsUI) {
-				if (btn != null && (btn.current == flixel.input.FlxInputState.PRESSED || btn.current == flixel.input.FlxInputState.JUST_PRESSED)) {
-					result = true;
+			if (trackedInputsUI.exists(key)) {
+				for (btn in trackedInputsUI.get(key)) {
+					if (btn != null && btn.pressed) {
+						result = true;
+						break;
+					}
 				}
 			}
-			for (btn in trackedInputsNOTES) {
-				if (btn != null && (btn.current == flixel.input.FlxInputState.PRESSED || btn.current == flixel.input.FlxInputState.JUST_PRESSED)) {
-					result = true;
+			if (!result && trackedInputsNOTES.exists(key)) {
+				for (btn in trackedInputsNOTES.get(key)) {
+					if (btn != null && btn.pressed) {
+						result = true;
+						break;
+					}
+				}
+			}
+			if (!result && key.startsWith('note_')) {
+				var fallbackKey:String = key.replace('note_', 'ui_');
+				if (trackedInputsUI.exists(fallbackKey)) {
+					for (btn in trackedInputsUI.get(fallbackKey)) {
+						if (btn != null && btn.pressed) {
+							result = true;
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -300,14 +335,31 @@ class Controls
 
 		#if TOUCH_CONTROLS
 		if (!result) {
-			for (btn in trackedInputsUI) {
-				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_RELEASED) {
-					result = true;
+			if (trackedInputsUI.exists(key)) {
+				for (btn in trackedInputsUI.get(key)) {
+					if (btn != null && btn.justReleased) {
+						result = true;
+						break;
+					}
 				}
 			}
-			for (btn in trackedInputsNOTES) {
-				if (btn != null && btn.current == flixel.input.FlxInputState.JUST_RELEASED) {
-					result = true;
+			if (!result && trackedInputsNOTES.exists(key)) {
+				for (btn in trackedInputsNOTES.get(key)) {
+					if (btn != null && btn.justReleased) {
+						result = true;
+						break;
+					}
+				}
+			}
+			if (!result && key.startsWith('note_')) {
+				var fallbackKey:String = key.replace('note_', 'ui_');
+				if (trackedInputsUI.exists(fallbackKey)) {
+					for (btn in trackedInputsUI.get(fallbackKey)) {
+						if (btn != null && btn.justReleased) {
+							result = true;
+							break;
+						}
+					}
 				}
 			}
 		}
