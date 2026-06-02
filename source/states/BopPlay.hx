@@ -86,7 +86,7 @@ class BopPlay extends MusicBeatState
         penthosScare.alpha = 0;
 
 		#if TOUCH_CONTROLS
-        addMobilePad("FULL", "A_B");
+        addMobilePad("FULL", "A_B_X_Y");
         #end
 			
         super.create();
@@ -100,18 +100,18 @@ class BopPlay extends MusicBeatState
 
         if (!controlLock) {
             if (controls.BACK) MusicBeatState.switchState(new MainMenuState());
-            if (controls.UI_DOWN_P || controls.UI_UP_P) changeSel(controls.UI_DOWN_P ? 1 : -1);
+            if (controls.UI_DOWN_P || controls.UI_UP_P #if mobile || mobilePad.buttonDown.justPressed || mobilePad.buttonUp.justPressed #end) changeSel(controls.UI_DOWN_P #if mobile || mobilePad.buttonDown.justPressed #end ? 1 : -1);
             if (controls.ACCEPT) {
                 if (songs[curSel].SN == 'yo') penIntro();
                 else load();
             }
-            if(controls.RESET)
+            if(controls.RESET #if mobile || mobilePad.buttonY.justPressed #end)
             {
                 persistentUpdate = false;
                 openSubState(new substates.ResetScoreSubState(songs[curSel].SN, 1, songs[curSel].icon));
                 FlxG.sound.play(Paths.sound('scrollMenu'));
             }
-            if(FlxG.keys.justPressed.CONTROL)
+            if(FlxG.keys.justPressed.CONTROL #if mobile || mobilePad.buttonC.justPressed #end)
             {
                 persistentUpdate = false;
                 openSubState(new substates.GameplayChangersSubstate());
