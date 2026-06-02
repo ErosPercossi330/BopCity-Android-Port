@@ -73,6 +73,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		#if TOUCH_CONTROLS
         addMobilePad("NONE", "A_B");
+		addMobilePadCamera();
         #end
 			
 		super.create();
