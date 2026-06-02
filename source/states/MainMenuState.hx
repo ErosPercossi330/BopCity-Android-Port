@@ -22,6 +22,10 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		#if TOUCH_CONTROLS
+		MobileData.init();
+		#end
+			
 		#if MODS_ALLOWED
 		Mods.pushGlobalMods();
 		#end
