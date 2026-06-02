@@ -178,7 +178,7 @@ class FreeplayState extends MusicBeatState
 		updateTexts();
 		
 		#if TOUCH_CONTROLS
-        addMobilePad("FULL", "A_B_C_X_Y_Z");
+        addMobilePad("FULL", "A_B_C_D_V_X_Y_Z");
         #end
 		
 		super.create();
@@ -239,13 +239,13 @@ class FreeplayState extends MusicBeatState
 			
 			if(songs.length > 1)
 			{
-				if(FlxG.keys.justPressed.HOME)
+				if(FlxG.keys.justPressed.HOME #if mobile || mobilePad.buttonD.justPressed #end)
 				{
 					curSelected = 0;
 					changeSelection();
 					holdTime = 0;	
 				}
-				else if(FlxG.keys.justPressed.END)
+				else if(FlxG.keys.justPressed.END #if mobile || mobilePad.buttonV.justPressed #end)
 				{
 					curSelected = songs.length - 1;
 					changeSelection();
