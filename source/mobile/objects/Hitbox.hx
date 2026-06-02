@@ -297,15 +297,27 @@ class HitboxOld extends FlxSpriteGroup {
 	}
 
 	public function createhitbox(x:Float = 0, y:Float = 0, frames:String, ?texture:String) {
-		var button = new MobileButton(x, y);
-		button.loadGraphic(FlxGraphic.fromFrame(getFrames(texture).getByName(frames)));
-		button.antialiasing = orgAntialiasing;
-		button.alpha = 0.0001;// sorry but I can't hard lock the hitbox alpha
-		button.onDown.callback = function (){ FlxTween.num(0, 0.75, 0.075, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); };
-		button.onUp.callback = function (){ FlxTween.num(0.75, 0, 0.1, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); }
-		button.onOut.callback = function (){ FlxTween.num(button.alpha, 0, 0.2, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); }
-		return button;
-	}
+        var button = new MobileButton(x, y);
+        
+        var atlas = getFrames(texture);
+        
+        if (atlas != null && atlas.getByName(frames) != null) {
+            button.loadGraphic(FlxGraphic.fromFrame(atlas.getByName(frames)));
+        } else {
+            trace('WARNING: Frame "$frames" not found in "$texture". Falling back to default.');
+            var defaultAtlas = getFrames("mobile/Hitbox/hitbox");
+            if (defaultAtlas != null && defaultAtlas.getByName(frames) != null) {
+                button.loadGraphic(FlxGraphic.fromFrame(defaultAtlas.getByName(frames)));
+            }
+        }
+
+        button.antialiasing = orgAntialiasing;
+        button.alpha = 0;
+        button.onDown.callback = function (){ FlxTween.num(0, 0.75, 0.075, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); };
+        button.onUp.callback = function (){ FlxTween.num(0.75, 0, 0.1, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); }
+        button.onOut.callback = function (){ FlxTween.num(button.alpha, 0, 0.2, {ease:FlxEase.circInOut}, function(alpha:Float){ button.alpha = alpha;}); }
+        return button;
+    }
 
 	public function getFrames(?texture:String = 'mobile/Hitbox/hitbox'):FlxAtlasFrames {
         var img:FlxGraphic = Paths.image(texture);
