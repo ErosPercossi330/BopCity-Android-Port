@@ -150,7 +150,7 @@ class CreditsState extends MusicBeatState
 					holdTime = 0;
 				}
 
-				if(controls.UI_DOWN || controls.UI_UP #if mobile || mobilePad.buttonDown.justPressed mobile || mobilePad.buttonUp.justPressed #end)
+				if(controls.UI_DOWN || controls.UI_UP #if mobile || mobilePad.buttonDown.justPressed || mobilePad.buttonUp.justPressed #end)
 				{
 					var checkLastHold:Int = Math.floor((holdTime - 0.5) * 10);
 					holdTime += elapsed;
