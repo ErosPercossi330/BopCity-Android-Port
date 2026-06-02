@@ -390,19 +390,29 @@ class Paths
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
-	{
-		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
-		#if MODS_ALLOWED
-		var xmlExists:Bool = false;
+    {
+        var imageLoaded:FlxGraphic = image(key, library, allowGPU);
+        #if MODS_ALLOWED
+        var xmlExists:Bool = false;
 
-		var xml:String = modsXml(key);
-		if(FileSystem.exists(xml)) xmlExists = true;
+        var xml:String = modsXml(key);
+        if(FileSystem.exists(xml)) xmlExists = true;
 
-		return FlxAtlasFrames.fromSparrow(imageLoaded, (xmlExists ? File.getContent(xml) : getPath('images/$key.xml', library)));
-		#else
-		return FlxAtlasFrames.fromSparrow(imageLoaded, getPath('images/$key.xml', library));
-		#end
-	}
+        if (xmlExists) {
+            return FlxAtlasFrames.fromSparrow(imageLoaded, File.getContent(xml));
+        }
+        #end
+
+        var xmlPath:String = '';
+        if (key.startsWith('mobile/') || library == 'mobile') {
+            var cleanKey = key.startsWith('mobile/') ? key.substring(7) : key;
+            xmlPath = 'assets/mobile/' + cleanKey + '.xml';
+        } else {
+            xmlPath = getPath('images/$key.xml', library);
+        }
+
+        return FlxAtlasFrames.fromSparrow(imageLoaded, xmlPath);
+    }
 
 	inline static public function getPackerAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
 	{
