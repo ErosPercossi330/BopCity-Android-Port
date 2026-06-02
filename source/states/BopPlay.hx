@@ -86,7 +86,7 @@ class BopPlay extends MusicBeatState
         penthosScare.alpha = 0;
 
 		#if TOUCH_CONTROLS
-        addMobilePad("FULL", "A_B_X_Y");
+        addMobilePad("UP_DOWN", "A_B_C_D_V_X_Y_Z");
         #end
 			
         super.create();
@@ -99,9 +99,9 @@ class BopPlay extends MusicBeatState
         super.update(elapsed);
 
         if (!controlLock) {
-            if (controls.BACK) MusicBeatState.switchState(new MainMenuState());
+            if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end) MusicBeatState.switchState(new MainMenuState());
             if (controls.UI_DOWN_P || controls.UI_UP_P #if mobile || mobilePad.buttonDown.justPressed || mobilePad.buttonUp.justPressed #end) changeSel(controls.UI_DOWN_P #if mobile || mobilePad.buttonDown.justPressed #end ? 1 : -1);
-            if (controls.ACCEPT) {
+            if (controls.ACCEPT #if mobile || mobilePad.buttonA.justPressed #end) {
                 if (songs[curSel].SN == 'yo') penIntro();
                 else load();
             }
