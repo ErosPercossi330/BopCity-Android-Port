@@ -179,6 +179,7 @@ class FreeplayState extends MusicBeatState
 		
 		#if TOUCH_CONTROLS
         addMobilePad("FULL", "A_B_C_D_V_X_Y_Z");
+		addMobilePadCamera();
         #end
 		
 		super.create();
@@ -571,6 +572,9 @@ class FreeplayState extends MusicBeatState
 
 	override function destroy():Void
 	{
+		#if TOUCH_CONTROLS
+		removeMobilePad();
+		#end
 		super.destroy();
 
 		FlxG.autoPause = ClientPrefs.data.autoPause;

@@ -113,6 +113,10 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		#if TOUCH_CONTROLS
+		addMobilePad("FULL", "A_B_C");
+		addMobilePadCamera();
+		#end
 		super();
 	}
 
