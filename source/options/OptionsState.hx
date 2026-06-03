@@ -157,10 +157,6 @@ class OptionsState extends MusicBeatState
 	override function destroy()
 	{
 		ClientPrefs.loadPrefs();
-		#if TOUCH_CONTROLS
-		removeMobilePad();
-		persistentUpdate = false;
-		#end
 		super.destroy();
 	}
 }
