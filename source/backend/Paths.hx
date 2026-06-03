@@ -32,7 +32,7 @@ class Paths
 			dumpExclusions.push(key);
 	}
 
-	public static var dumpExclusions:Array<String> = ['assets/shared/music/freakyMenu.$SOUND_EXT', 'assets/shared/mobile/touchpad/bg.png'];
+	public static var dumpExclusions:Array<String> = ['assets/shared/music/freakyMenu.$SOUND_EXT'];
 	/// haya I love you for the base cache dump I took to the max
 	public static function clearUnusedMemory() {
 		// clear non local assets in the tracked assets list
@@ -111,10 +111,9 @@ class Paths
 			if(FileSystem.exists(modded)) return modded;
 		}
 		#end
-
 		if(library == "mobile")
 			return getSharedPath('mobile/$file');
-		
+
 		if (library != null)
 			return getLibraryPath(file, library);
 
@@ -494,7 +493,7 @@ class Paths
 
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '') {
-		return 'mods/' + key;
+		return  #if mobile Sys.getCwd() + #end 'mods/' + key;
 	}
 
 	inline static public function modsFont(key:String) {
@@ -566,6 +565,7 @@ class Paths
 		}
 		return #if mobile Sys.getCwd() + #end 'mods/' + key;
 	}
+	#end
 
 	#if (android || linux || ios)
 	static function findFile(key:String):String {
@@ -616,7 +616,6 @@ class Paths
 			return null;
 		}
 	}
-	#end
 	#end
 
 	#if flxanimate
@@ -701,6 +700,7 @@ class Paths
 		return null;
 	}*/
 	#end
+
 	public static function readDirectory(directory:String):Array<String>
 	{
 		#if MODS_ALLOWED
@@ -718,7 +718,7 @@ class Paths
 					dirs.push(dir);
 			}
 		}
-		return dirs;
+		return dirs.map(dir -> dir.substr(dir.lastIndexOf("/") + 1));
 		#end
 	}
 }
