@@ -28,7 +28,7 @@ class BopPlay extends MusicBeatState
 
     var controlLock:Bool = false;
     
-    
+    var substateCooldown:Float = 0;
 
     override function create() {
 
@@ -91,12 +91,21 @@ class BopPlay extends MusicBeatState
 			
         super.create();
 
+    }
 
-
+	override function closeSubState() {
+        super.closeSubState();
+		removeMobilePad();
+        substateCooldown = 0.35;
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+
+		if (substateCooldown > 0) {
+            substateCooldown -= elapsed;
+            return; 
+        }
 
         if (!controlLock) {
             if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end) MusicBeatState.switchState(new MainMenuState());
@@ -105,7 +114,7 @@ class BopPlay extends MusicBeatState
                 if (songs[curSel].SN == 'yo') penIntro();
                 else load();
             }
-            if(controls.RESET #if mobile || mobilePad.buttonY.justPressed #end)
+            if(controls.RESET #if mobile || mobilePad.buttonX.justPressed #end)
             {
                 persistentUpdate = false;
                 openSubState(new substates.ResetScoreSubState(songs[curSel].SN, 1, songs[curSel].icon));
