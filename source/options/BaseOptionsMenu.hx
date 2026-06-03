@@ -106,7 +106,6 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		#if TOUCH_CONTROLS
 		addMobilePad("UP_DOWN", "A_B_C");
-		addMobilePadCamera();
 		#end
 	}
 

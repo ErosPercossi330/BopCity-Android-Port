@@ -1,7 +1,7 @@
 package mobile.options;
 
 #if desktop
-import backend.Discord.DiscordClient;
+import Discord.DiscordClient;
 #end
 import openfl.text.TextField;
 import flixel.addons.display.FlxGridOverlay;
@@ -23,7 +23,7 @@ import mobile.backend.StorageUtil;
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
-	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL", "EXTERNAL_OBB", "EXTERNAL_MEDIA"];
+	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL", "EXTERNAL_EX", "EXTERNAL_NF", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL_ONLINE"];
 	var externalPaths:Array<String> = StorageUtil.checkExternalPaths(true);
 	final lastStorageType:String = ClientPrefs.data.storageType;
 	#end
@@ -141,10 +141,6 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
-		#if TOUCH_CONTROLS
-		addMobilePad("FULL", "A_B_C");
-		addMobilePadCamera();
-		#end
 		super();
 	}
 
@@ -172,6 +168,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 	function resetMobilePad()
 	{
 		removeMobilePad();
+		addMobilePad("FULL", "A_B_C");
 	}
 	#end
 

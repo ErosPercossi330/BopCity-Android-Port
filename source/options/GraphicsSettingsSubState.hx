@@ -60,10 +60,6 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		option.onChange = onChangeFramerate;
 		#end
 
-		#if TOUCH_CONTROLS
-		addMobilePad("FULL", "A_B_C");
-		addMobilePadCamera();
-		#end
 		super();
 		insert(1, boyfriend);
 	}

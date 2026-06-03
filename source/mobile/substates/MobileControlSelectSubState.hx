@@ -205,6 +205,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 		keyboard = new UIButton(exit.x, exit.height + exit.y + 20, "Keyboard", () ->
 		{
 			save();
+			removeMobilePad();
 			leftArrow.visible = rightArrow.visible = grpControls.visible = exit.visible = reset.visible = keyboard.visible = upPozition.visible = downPozition.visible = leftPozition.visible = rightPozition.visible = extra1Pozition.visible = extra2Pozition.visible = extra3Pozition.visible = extra4Pozition.visible = tipText.visible = false;
 			if (daChoice == "Hitbox") {
 				if(ClientPrefs.data.hitboxmode == 'Classic') hbox.visible = false;

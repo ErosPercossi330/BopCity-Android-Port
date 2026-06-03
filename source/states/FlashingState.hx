@@ -40,7 +40,6 @@ class FlashingState extends MusicBeatState
 		add(warnText);
 		#if TOUCH_CONTROLS
         addMobilePad("NONE", "A_B");
-		addMobilePadCamera();
         #end
 	}
 
