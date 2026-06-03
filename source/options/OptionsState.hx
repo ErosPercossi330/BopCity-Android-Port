@@ -89,10 +89,6 @@ class OptionsState extends MusicBeatState
 	override function closeSubState() {
 		super.closeSubState();
 		ClientPrefs.saveSettings();
-		#if TOUCH_CONTROLS
-		removeMobilePad();
-		persistentUpdate = true;
-		#end
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Options Menu", null);
 		#end

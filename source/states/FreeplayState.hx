@@ -188,9 +188,6 @@ class FreeplayState extends MusicBeatState
 	override function closeSubState() {
 		changeSelection(0, false);
 		persistentUpdate = true;
-		#if TOUCH_CONTROLS
-		removeMobilePad();
-		#end
 		super.closeSubState();
 	}
 
@@ -572,9 +569,6 @@ class FreeplayState extends MusicBeatState
 
 	override function destroy():Void
 	{
-		#if TOUCH_CONTROLS
-		removeMobilePad();
-		#end
 		super.destroy();
 
 		FlxG.autoPause = ClientPrefs.data.autoPause;
