@@ -209,7 +209,6 @@ class VisualsUISubState extends BaseOptionsMenu
 		if(changedMusic && !OptionsState.onPlayState) FlxG.sound.playMusic(Paths.music('freakyMenu'), 1, true);
 		#if TOUCH_CONTROLS
 		removeMobilePad();
-		persistentUpdate = false;
 		#end
 		super.destroy();
 	}
