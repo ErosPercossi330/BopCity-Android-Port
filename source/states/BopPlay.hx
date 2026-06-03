@@ -95,7 +95,6 @@ class BopPlay extends MusicBeatState
 
 	override function closeSubState() {
         super.closeSubState();
-		removeMobilePad();
         substateCooldown = 0.35;
     }
 
