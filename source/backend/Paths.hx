@@ -339,11 +339,11 @@ class Paths
 					return true;
 
 			if (FileSystem.exists(mods(Mods.currentModDirectory + '/' + key)) || FileSystem.exists(mods(key)))
+				return true;
 			#if (android || linux || ios)
 			else if (FileSystem.exists(findFile('$mod/$key')))
 				return true;
 			#end
-				return true;
 			
 			if (FileSystem.exists(mods('$key')))
 				return true;
