@@ -86,7 +86,8 @@ class BopPlay extends MusicBeatState
         penthosScare.alpha = 0;
 
 		#if TOUCH_CONTROLS
-        addMobilePad("UP_DOWN", "A_B_C_D_V_X_Y_Z");
+        addMobilePad("UP_DOWN", "A_B_C_X");
+        addMobilePadCamera();
         #end
 			
         super.create();

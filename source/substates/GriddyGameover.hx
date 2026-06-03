@@ -70,6 +70,7 @@ class GriddyGameover extends MusicBeatSubstate
 
 		#if TOUCH_CONTROLS
         addMobilePad("NONE", "B");
+		addMobilePadCamera();
         #end
 			
 		super.create();

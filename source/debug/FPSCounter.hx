@@ -65,8 +65,12 @@ class FPSCounter extends TextField
 
 	public dynamic function updateText():Void
 	{ // so people can override it in hscript
+		#if mobile
+		text = 'MOD BY DANIEL HUMMUS\nFPS: ${currentFPS}' + '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}\nHUMMUS ENGINE v1.2\nMobile Port : v1';
+		#else
 		text = 'MOD BY DANIEL HUMMUS\nFPS: ${currentFPS}' + '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}\nHUMMUS ENGINE v1.2';
-
+		#end
+		
 		textColor = 0xFF4BD8;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
 			textColor = 0xFFFF0000;

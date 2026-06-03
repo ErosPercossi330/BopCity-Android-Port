@@ -137,6 +137,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		#if TOUCH_CONTROLS
         addMobilePad("FULL", "A_B_C");
+		addMobilePadCamera();
         #end
 	}
 

@@ -1,7 +1,7 @@
 package mobile.options;
 
 #if desktop
-import Discord.DiscordClient;
+import backend.Discord.DiscordClient;
 #end
 import openfl.text.TextField;
 import flixel.addons.display.FlxGridOverlay;
@@ -23,7 +23,7 @@ import mobile.backend.StorageUtil;
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
-	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL", "EXTERNAL_EX", "EXTERNAL_NF", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL_ONLINE"];
+	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL", "EXTERNAL_OBB", "EXTERNAL_MEDIA"];
 	var externalPaths:Array<String> = StorageUtil.checkExternalPaths(true);
 	final lastStorageType:String = ClientPrefs.data.storageType;
 	#end
@@ -168,7 +168,6 @@ class MobileOptionsSubState extends BaseOptionsMenu
 	function resetMobilePad()
 	{
 		removeMobilePad();
-		addMobilePad("FULL", "A_B_C");
 	}
 	#end
 

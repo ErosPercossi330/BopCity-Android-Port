@@ -79,6 +79,7 @@ class MainMenuState extends MusicBeatState
 
 		#if TOUCH_CONTROLS
 		addMobilePad("NONE", "A_B");
+		addMobilePadCamera();
 		#end
 
 		super.create();

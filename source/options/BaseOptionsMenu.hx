@@ -105,7 +105,8 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		reloadCheckboxes();
 
 		#if TOUCH_CONTROLS
-		addMobilePad("UP_DOWN", "A_B_C");
+		addMobilePad("FULL", "A_B_C");
+		addMobilePadCamera();
 		#end
 	}
 
