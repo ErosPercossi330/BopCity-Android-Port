@@ -87,7 +87,6 @@ class BopPlay extends MusicBeatState
 
 		#if TOUCH_CONTROLS
         addMobilePad("UP_DOWN", "A_B_C_X");
-        addMobilePadCamera();
         #end
 			
         super.create();
