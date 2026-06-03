@@ -159,6 +159,7 @@ enum abstract StorageType(String) from String to String
 {
     final forcedPath = '/storage/emulated/0/';
 	final packageNameLocal = 'com.erosethan.Bopcity67';
+	final fileLocal = 'BopCity';
 
 	var EXTERNAL_DATA = "EXTERNAL_DATA";
 	var EXTERNAL_OBB = "EXTERNAL_OBB";
