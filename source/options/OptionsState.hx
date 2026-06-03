@@ -117,15 +117,19 @@ class OptionsState extends MusicBeatState
 				FlxG.sound.music.volume = 0;
 			}
 			else MusicBeatState.switchState(new MainMenuState());
+			return;
 		}
+			
 		#if TOUCH_CONTROLS
 		if (mobilePad.buttonC.justPressed) {
 			removeMobilePad();
 			persistentUpdate = false;
 			openSubState(new MobileExtraControl());
+			return;
 		}
 		#end
-		else if (controls.ACCEPT #if mobile || mobilePad.buttonA.justPressed #end) openSelectedSubstate(options[curSelected]);
+		if (controls.ACCEPT #if mobile || mobilePad.buttonA.justPressed #end) 
+				 openSelectedSubstate(options[curSelected]);
 	}
 	
 	function changeSelection(change:Int = 0) {
