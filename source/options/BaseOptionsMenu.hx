@@ -147,6 +147,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end) {
 			close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
+            return;
 		}
 
 		if(nextAccept <= 0)
@@ -188,7 +189,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						FlxG.sound.play(Paths.sound('scrollMenu'));
 					}
 				}
-				else if(controls.UI_LEFT || controls.UI_RIGHT #if mobile || mobilePad.buttonLeft.justPressed || mobilePad.buttonRight.justPressed #end)
+				else if(controls.UI_LEFT #if mobile || mobilePad.buttonLeft.justPressed #end || controls.UI_RIGHT #if mobile || mobilePad.buttonRight.justPressed #end)
 				{
 					var pressed = (controls.UI_LEFT_P || controls.UI_RIGHT_P #if mobile || mobilePad.buttonLeft.justPressed  || mobilePad.buttonRight.justPressed #end);
 					if(holdTime > 0.5 || pressed)
