@@ -207,14 +207,16 @@ class VisualsUISubState extends BaseOptionsMenu
 	override function destroy()
 	{
 		if(changedMusic && !OptionsState.onPlayState) FlxG.sound.playMusic(Paths.music('freakyMenu'), 1, true);
+		#if TOUCH_CONTROLS
+		removeMobilePad();
+		persistentUpdate = false;
+		#end
 		super.destroy();
 	}
 
-	#if !mobile
 	function onChangeFPSCounter()
 	{
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = ClientPrefs.data.showFPS;
 	}
-	#end
 }
