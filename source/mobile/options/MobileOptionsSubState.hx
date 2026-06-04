@@ -83,7 +83,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 
 		if(HitboxTypes == null) HitboxTypes = [];
 		if(!HitboxTypes.contains("New")) HitboxTypes.insert(0, "New");
-		if(!HitboxTypes.contains("Classic")) HitboxTypes.insert(0, "Classic");
+		//if(!HitboxTypes.contains("Classic")) HitboxTypes.insert(0, "Classic");
 		
 		option = new Option('Hitbox Mode:',
 			"Choose your Hitbox Style! -mariomaster",
