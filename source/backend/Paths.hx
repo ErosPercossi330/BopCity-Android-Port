@@ -671,10 +671,8 @@ class Paths
 	public static function readDirectory(directory:String):Array<String>
 	{
 		// FIXED: Rely strictly on default engine assets database arrays if platform isn't physical desktop storage
-		#if (MODS_ALLOWED && !ios)
-		if (FileSystem.exists(directory)) {
-			return FileSystem.readDirectory(directory);
-		}
+		#if MODS_ALLOWED
+		return FileSystem.readDirectory(directory);
 		#end
 
 		var dirs:Array<String> = [];
