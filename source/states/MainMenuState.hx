@@ -77,11 +77,12 @@ class MainMenuState extends MusicBeatState
 
 		generatebuttons();
 
+		super.create();
+
 		#if TOUCH_CONTROLS
 		addMobilePad("NONE", "A_B");
+		addMobilePadCamera();
 		#end
-
-		super.create();
 	}
 
 	var tempBu = ['freeplay', 'playNow', 'credits', 'options'];
