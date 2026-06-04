@@ -135,19 +135,19 @@ class BaseOptionsMenu extends MusicBeatSubstate
 			return;
 		}
 
-		if (controls.UI_UP_P #if mobile || mobilePad.buttonUp.justPressed #end)
-		{
-			changeSelection(-1);
-		}
-		if (controls.UI_DOWN_P #if mobile || mobilePad.buttonDown.justPressed #end)
-		{
-			changeSelection(1);
-		}
-
 		if (controls.BACK #if mobile || mobilePad.buttonB.justPressed #end) {
 			close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
             return;
+		}
+	
+		else if (controls.UI_UP_P #if mobile || mobilePad.buttonUp.justPressed #end)
+		{
+			changeSelection(-1);
+		}
+		else if (controls.UI_DOWN_P #if mobile || mobilePad.buttonDown.justPressed #end)
+		{
+			changeSelection(1);
 		}
 
 		if(nextAccept <= 0)
