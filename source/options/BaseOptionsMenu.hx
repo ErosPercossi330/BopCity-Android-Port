@@ -258,7 +258,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 					if(curOption.type != 'string')
 						holdTime += elapsed;
 				}
-				else if(controls.UI_LEFT_P || #if mobile || mobilePad.buttonLeft.justPressed #end controls.UI_RIGHT_P #if mobile|| mobilePad.buttonRight.justPressed #end)
+				else if(controls.UI_LEFT #if mobile || mobilePad.buttonLeft.justPressed #end || controls.UI_RIGHT #if mobile || mobilePad.buttonRight.justPressed #end)
 				{
 					if(holdTime > 0.5) FlxG.sound.play(Paths.sound('scrollMenu'));
 					holdTime = 0;
