@@ -91,8 +91,20 @@ class MusicBeatState extends FlxUIState
 	}
 
 	override function destroy() {
-		super.destroy();
-
+		if (mobilePad != null && mobilePad.cameras != null) {
+			for (cam in mobilePad.cameras) {
+				if (cam != null && cam != FlxG.camera) {
+					FlxG.cameras.remove(cam, true);
+				}
+			}
+		}
+		if (mobilec != null && mobilec.cameras != null) {
+			for (cam in mobilec.cameras) {
+				if (cam != null && cam != FlxG.camera) {
+					FlxG.cameras.remove(cam, true);
+				}
+			}
+		}
 		if (mobilePad != null)
 			mobilePad = FlxDestroyUtil.destroy(mobilePad);
 			
@@ -101,6 +113,8 @@ class MusicBeatState extends FlxUIState
 
 		controls.trackedInputsUI.clear();
 		controls.trackedInputsNOTES.clear();
+
+		super.destroy();
 	}
 	#end
 
