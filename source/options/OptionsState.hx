@@ -78,12 +78,13 @@ class OptionsState extends MusicBeatState
 
 		changeSelection();
 		ClientPrefs.saveSettings();
+			
+		super.create();
 
 		#if TOUCH_CONTROLS
 		addMobilePad("UP_DOWN", "A_B_C");
+		addMobilePadCamera();
 		#end
-			
-		super.create();
 	}
 
 	override function closeSubState() {
@@ -117,7 +118,6 @@ class OptionsState extends MusicBeatState
 				FlxG.sound.music.volume = 0;
 			}
 			else MusicBeatState.switchState(new MainMenuState());
-			return;
 		}
 			
 		#if TOUCH_CONTROLS
