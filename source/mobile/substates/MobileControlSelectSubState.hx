@@ -244,12 +244,17 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 	}
 	
 	override function closeSubState() {
+		super.closeSubState();
 		changeSelection(0);
 		if (daChoice == "Hitbox") {
-			if(ClientPrefs.data.hitboxmode == 'Classic') hbox.visible = true;
-			else newhbox.visible = true;
+			if (ClientPrefs.data.hitboxmode == 'Classic') {
+				if (hbox != null) hbox.visible = true;
+			} else {
+				if (newhbox != null) newhbox.visible = true;
+			}
 		}
-		super.closeSubState();
+		if (mobilePad != null) {
+		}
 	}
 
 	public function changeSelection(change:Int = 0)
