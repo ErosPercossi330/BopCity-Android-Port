@@ -17,6 +17,8 @@ import options.Option;
 import openfl.Lib;
 import haxe.io.Path;
 import mobile.backend.StorageUtil;
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
 
 class MobileOptionsSubState extends BaseOptionsMenu
 {

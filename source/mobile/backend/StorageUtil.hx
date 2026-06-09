@@ -8,6 +8,9 @@ import android.Tools;
 import android.callback.CallBack;
 #end
 
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+
 #if sys
 import sys.io.Process;
 #end

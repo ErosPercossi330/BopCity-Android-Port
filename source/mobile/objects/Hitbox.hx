@@ -1,5 +1,7 @@
 package mobile.objects;
 
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
 import flixel.graphics.FlxGraphic;
 import openfl.display.BitmapData;
 import openfl.display.Shape;

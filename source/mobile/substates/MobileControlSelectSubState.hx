@@ -1,5 +1,7 @@
 package mobile.substates;
 
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
 import mobile.objects.MobileControls.Config;
 import flixel.ui.FlxButton as UIButton;
 import flixel.addons.display.FlxBackdrop;

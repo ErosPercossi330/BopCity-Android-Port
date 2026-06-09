@@ -16,6 +16,11 @@ import lime.utils.Assets;
 import flash.media.Sound;
 import haxe.Json;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 #if MODS_ALLOWED
 import backend.Mods;
 #end
@@ -212,65 +217,93 @@ class Paths
 	static var lastImageErrorFile:String = null;
 
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
-	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxGraphic
+
+    static public function image(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxGraphic
     {
-        var bitmap:BitmapData = null;
-        var file:String = null;
-        
         var cacheKey:String = (library != null ? '$library:' : '') + 'images/$key';
+        
+        if (currentTrackedAssets.exists(cacheKey)) {
+            localTrackedAssets.push(cacheKey);
+            return currentTrackedAssets.get(cacheKey);
+        }
 
         #if MODS_ALLOWED
-        file = modsImages(key);
-        if (currentTrackedAssets.exists(file))
-        {
-            localTrackedAssets.push(file);
-            return currentTrackedAssets.get(file);
+        var modKey:String = modsImages(key);
+        if(FileSystem.exists(modKey)) {
+            if(!currentTrackedAssets.exists(modKey)) {
+                var newBitmap:BitmapData = openfl.display.BitmapData.fromFile(modKey);
+                if (newBitmap != null) {
+                    var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(newBitmap, false, modKey);
+                    newGraphic.persist = true;
+                    newGraphic.destroyOnNoUse = false;
+                    currentTrackedAssets.set(modKey, newGraphic);
+                }
+            }
+            localTrackedAssets.push(modKey);
+            return currentTrackedAssets.get(modKey);
         }
-        else if (FileSystem.exists(file))
-            bitmap = BitmapData.fromFile(file);
-        else
         #end
-        {
-            file = getPath('images/$key.astc', BINARY, library);
-            if (OpenFlAssets.exists(file, BINARY))
-            {
-                if (currentTrackedAssets.exists(cacheKey))
-                {
-                    localTrackedAssets.push(cacheKey);
-                    return currentTrackedAssets.get(cacheKey);
-                }
-                bitmap = OpenFlAssets.getBitmapData(file);
-                file = cacheKey;
-            }
-            else
-            {
-                file = getPath('images/$key.png', IMAGE, library);
-                if (currentTrackedAssets.exists(cacheKey))
-                {
-                    localTrackedAssets.push(cacheKey);
-                    return currentTrackedAssets.get(cacheKey);
-                }
-                else if (OpenFlAssets.exists(file, IMAGE))
-                {
-                    bitmap = OpenFlAssets.getBitmapData(file);
-                    file = cacheKey;
-                }
-            }
-        }
 
-        if (bitmap != null)
-        {
-            localTrackedAssets.push(file);
-            var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file);
-            newGraphic.persist = true;
-            newGraphic.destroyOnNoUse = false;
-            currentTrackedAssets.set(file, newGraphic);
-            return newGraphic;
-        }
+        var cleanKey:String = key;
+        if (cleanKey.startsWith("assets/")) cleanKey = cleanKey.substring(7);
+        if (library != null && cleanKey.startsWith(library + "/")) cleanKey = cleanKey.substring(library.length + 1);
 
-        trace('Paths.image(): returning null on file lookup reference ($cacheKey)');
+        var astcPath       = getPath('images/$cleanKey.astc', BINARY, library);
+        var normalAstcPath = getPath('$cleanKey.astc', BINARY, library);
+        var defaultAstcPath       = getSharedPath('images/$cleanKey.astc');
+        var defaultNormalAstcPath = getSharedPath('$cleanKey.astc');
+
+        var pngPath        = getPath('images/$cleanKey.png', IMAGE, library);
+        var normalPngPath  = getPath('$cleanKey.png', IMAGE, library);
+        var defaultPngPath        = getSharedPath('images/$cleanKey.png');
+        var defaultNormalPngPath  = getSharedPath('$cleanKey.png');
+
+        if (OpenFlAssets.exists(astcPath, BINARY))             return createFlxGraphic(astcPath, BINARY, cacheKey);
+        if (OpenFlAssets.exists(normalAstcPath, BINARY))       return createFlxGraphic(normalAstcPath, BINARY, cacheKey);
+        if (OpenFlAssets.exists(defaultAstcPath, BINARY))       return createFlxGraphic(defaultAstcPath, BINARY, cacheKey);
+        if (OpenFlAssets.exists(defaultNormalAstcPath, BINARY)) return createFlxGraphic(defaultNormalAstcPath, BINARY, cacheKey);
+
+        if (OpenFlAssets.exists(pngPath, IMAGE))               return createFlxGraphic(pngPath, IMAGE, cacheKey);
+        if (OpenFlAssets.exists(normalPngPath, IMAGE))         return createFlxGraphic(normalPngPath, IMAGE, cacheKey);
+        if (OpenFlAssets.exists(defaultPngPath, IMAGE))         return createFlxGraphic(defaultPngPath, IMAGE, cacheKey);
+        if (OpenFlAssets.exists(defaultNormalPngPath, IMAGE))   return createFlxGraphic(defaultNormalPngPath, IMAGE, cacheKey);
+        
+        trace('Asset totally missing - Clean Key: ' + cleanKey + ' (Orig: ' + key + ', Library: ' + library + ')');
         return null;
-	}
+    }
+
+    private static function createFlxGraphic(path:String, type:openfl.utils.AssetType, cacheKey:String):FlxGraphic 
+    {
+        if(!currentTrackedAssets.exists(cacheKey)) {
+            var assetBitmap:BitmapData = null;
+
+            if (type == BINARY && haxe.io.Path.extension(path) == 'astc') {
+                try {
+                    var bytes = OpenFlAssets.getBytes(path);
+                    if (bytes != null) {
+                        var texture = openfl.Lib.current.stage.context3D.createASTCTexture(bytes);
+                        assetBitmap = BitmapData.fromTexture(texture);
+                    }
+                } catch(e:Dynamic) {
+                    trace('Failed loading hardware ASTC texture: ' + e);
+                }
+            } else {
+                assetBitmap = OpenFlAssets.getBitmapData(path, false);
+            }
+
+            if (assetBitmap != null) {
+                var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(assetBitmap, false, cacheKey);
+                newGraphic.persist = true;
+                newGraphic.destroyOnNoUse = false;
+                currentTrackedAssets.set(cacheKey, newGraphic);
+            } else {
+                trace('BitmapData processing returned null for path target: ' + path);
+                return null;
+            }
+        }
+        localTrackedAssets.push(cacheKey);
+        return currentTrackedAssets.get(cacheKey);
+    }
 
 	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = true)
 	{

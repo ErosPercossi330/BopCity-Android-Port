@@ -1,5 +1,7 @@
 package mobile.backend;
 
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
 import haxe.ds.Map;
 import haxe.Json;
 import haxe.io.Path;
