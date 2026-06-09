@@ -8,6 +8,10 @@ import android.Tools;
 import android.callback.CallBack;
 #end
 
+#if sys
+import sys.io.Process;
+#end
+
 /**
  * A storage class for mobile.
  * @author Mihai Alexandru (M.A. Jigsaw)

@@ -269,10 +269,7 @@ class Paths
 			return newGraphic;
 		}
 
-		if (lastImageErrorFile != file && ClientPrefs.isDebug()) {
-			Sys.println('Paths.image(): oh no its returning null NOOOO ($file)');
-			lastImageErrorFile = file;
-		}
+		trace('Paths.image(): oh no its returning null NOOOO ($file)');
 		return null;
 	}
 
