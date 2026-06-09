@@ -86,7 +86,7 @@
         <assets path="assets/shared/images-astc" rename="assets/shared/images" library="shared" />
         <assets path="assets/shared" library="shared" exclude="*.mp3|images-png|images-astc" />
         
-        <assets path="assets/week_assets/images-astc" rename="assets/images" library="week_assets" />
+        <assets path="assets/week_assets/week1/images-astc" rename="assets/images" library="week_assets" />
         <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.mp3|images-png|images-astc" unless="web" />
         <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.ogg|images-png|images-astc" if="web" />
 
@@ -106,7 +106,7 @@
         <assets path="assets/shared" library="shared" exclude="*.mp3|images-png|images-astc" unless="web" />
         <assets path="assets/shared" library="shared" exclude="*.ogg|images-png|images-astc" if="web" />
 
-        <assets path="assets/week_assets/images-png" rename="assets/images" library="week_assets" />
+        <assets path="assets/week_assets/week1/images-png" rename="assets/images" library="week_assets" />
         <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.mp3|images-png|images-astc" unless="web" />
         <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.ogg|images-png|images-astc" if="web" />
 
