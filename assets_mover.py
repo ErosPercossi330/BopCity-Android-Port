@@ -7,6 +7,7 @@ BASE_ASSET_DIRS = [
     "assets/shared",
     "assets/impostor",
     "assets/exclude",
+    "assets/week_assets/week1",
     "assets/secrets"  # Added secrets folder here
 ]
 
