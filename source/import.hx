@@ -15,8 +15,8 @@ import backend.Achievements;
 #end
 
 #if sys
-import sys.*;
-import sys.io.*;
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
 #elseif js
 import js.html.*;
 #end

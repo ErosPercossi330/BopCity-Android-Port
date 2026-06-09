@@ -1,8 +1,6 @@
 package;
 
 import haxe.Json;
-import sys.FileSystem;
-import sys.io.File;
 
 typedef Library = {
 	name:String, type:String,

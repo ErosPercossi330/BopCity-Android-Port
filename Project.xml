@@ -66,45 +66,69 @@
 	<!-- Turn on Crash Handler -->
 	<define name="CRASH_HANDLER" if="desktop || mobile" />
 
-	<!-- Assets -->
+    <assets path="assets/embeds/songs" library="songs" embed="true" rename="assets/songs"/>
+    <assets path="assets/embeds" rename="assets" embed="true"/>
 
-	<assets path="assets/embeds/songs" library="songs" embed="true" rename="assets/songs"/>
-	<assets path="assets/embeds" rename= "assets" embed="true"/>
+    <section if="TOUCH_CONTROLS">
+        <assets path="mobile"         rename="assets/mobile"        exclude="*.ogg" if="web"/>
+        <assets path="mobile"         rename="assets/mobile"        exclude="*.mp3" unless="web"/>
+        <assets path="mobile"         rename="assets/shared/mobile" exclude="*.mp3" unless="web"/>
+        <assets path="mobile"         rename="assets/shared/mobile" exclude="*.ogg" unless="web"/>
+        <assets path="mobile"         rename="assets/shared/images/mobile"        exclude="*.mp3" if="web"/>
+        <assets path="mobile"         rename="assets/shared/images/mobile"        exclude="*.ogg" if="web"/>
+        <assets path="mobile"         rename="assets/images/mobile" exclude="*.mp3" unless="web"/>
+        <assets path="mobile"         rename="assets/images/mobile" exclude="*.ogg" unless="web"/>   
+    </section>
+    
+    <assets path="assets/fonts" />
 
-	<section if="TOUCH_CONTROLS">
-		<assets path="mobile"         rename="assets/mobile"        exclude="*.ogg" if="web"/>
-		<assets path="mobile"         rename="assets/mobile"        exclude="*.mp3" unless="web"/>
-		<assets path="mobile"         rename="assets/shared/mobile"        exclude="*.mp3" unless="web"/>
-		<assets path="mobile"         rename="assets/shared/mobile"        exclude="*.ogg" unless="web"/>
-		<assets path="mobile"         rename="assets/shared/images/mobile"        exclude="*.mp3" if="web"/>
-		<assets path="mobile"         rename="assets/shared/images/mobile"        exclude="*.ogg" if="web"/>
-		<assets path="mobile"         rename="assets/images/mobile"        exclude="*.mp3" unless="web"/>
-		<assets path="mobile"         rename="assets/images/mobile"        exclude="*.ogg" unless="web"/>	
-	</section>
-	
-	<assets path="assets/fonts" />
-	<assets path="assets/shared"        exclude="*.ogg" if="web"/>
-	<assets path="assets/shared"        exclude="*.mp3" unless="web"/>
-	<assets path="assets/videos"        library="videos"        if="VIDEOS_ALLOWED"/>
-	<!-- <assets path="assets/songs"         library="songs"         exclude="*.ogg" if="web"/>
-	<assets path="assets/songs"         library="songs"         exclude="*.mp3" unless="web"/> -->
-	<assets path="assets/week_assets"   library="week_assets"   rename="assets" exclude="*.ogg" if="web"/>
-	<assets path="assets/week_assets"   library="week_assets"   rename="assets" exclude="*.mp3" unless="web"/>
-	<section if="TITLE_SCREEN_EASTER_EGG">
-		<assets path="assets/secrets" rename="assets/shared" exclude="*.ogg" if="web"/>
-		<assets path="assets/secrets" rename="assets/shared" exclude="*.mp3"  unless="web"/>
-	</section>
+    <section if="mobile">
+        <assets path="assets/shared/images-astc" rename="assets/shared/images" library="shared" />
+        <assets path="assets/shared" library="shared" exclude="*.mp3|images-png|images-astc" />
+        
+        <assets path="assets/week_assets/images-astc" rename="assets/images" library="week_assets" />
+        <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.mp3|images-png|images-astc" unless="web" />
+        <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.ogg|images-png|images-astc" if="web" />
 
-	<library name="videos"        preload="true" if="VIDEOS_ALLOWED"/>
-	<library name="songs"         preload="true" />
-	<library name="week_assets"   preload="true" />
+        <section if="MODS_ALLOWED">
+            <assets path="example_mods/images-astc" rename="mods/images" embed="false" />
+            <assets path="example_mods" rename="mods" embed="false" exclude="images-png|images-astc" />
+        </section>
 
-	<define name="CHECK_FOR_UPDATES" if="desktop officialBuild"/>
+        <section if="TITLE_SCREEN_EASTER_EGG">
+            <assets path="assets/secrets/images-astc" rename="assets/images" />
+            <assets path="assets/secrets" rename="assets" exclude="*.mp3|images-png|images-astc" />
+        </section>
+    </section>
+    
+    <section unless="mobile">
+        <assets path="assets/shared/images-png" rename="assets/shared/images" library="shared" />
+        <assets path="assets/shared" library="shared" exclude="*.mp3|images-png|images-astc" unless="web" />
+        <assets path="assets/shared" library="shared" exclude="*.ogg|images-png|images-astc" if="web" />
 
-	<section if="MODS_ALLOWED">
-		<assets path='example_mods' rename='mods' embed='false'/>
-	</section>
-	<assets path='art/readme.txt' rename='do NOT readme.txt' />
+        <assets path="assets/week_assets/images-png" rename="assets/images" library="week_assets" />
+        <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.mp3|images-png|images-astc" unless="web" />
+        <assets path="assets/week_assets" library="week_assets" rename="assets" exclude="*.ogg|images-png|images-astc" if="web" />
+
+        <section if="MODS_ALLOWED">
+            <assets path="example_mods/images-png" rename="mods/images" embed="false" />
+            <assets path="example_mods" rename="mods" embed="false" exclude="images-png|images-astc" />
+        </section>
+
+        <section if="TITLE_SCREEN_EASTER_EGG">
+            <assets path="assets/secrets/images-png" rename="assets/images" />
+            <assets path="assets/secrets" rename="assets" exclude="*.mp3|images-png|images-astc" unless="web" />
+            <assets path="assets/secrets" rename="assets" exclude="*.ogg|images-png|images-astc" if="web" />
+        </section>
+    </section>
+
+    <assets path="assets/videos"        library="videos"        if="VIDEOS_ALLOWED"/>
+
+    <library name="videos"        preload="true" if="VIDEOS_ALLOWED"/>
+    <library name="songs"         preload="true" />
+    <library name="week_assets"   preload="true" />
+
+    <define name="CHECK_FOR_UPDATES" if="desktop officialBuild"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

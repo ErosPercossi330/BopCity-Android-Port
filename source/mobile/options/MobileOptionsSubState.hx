@@ -16,8 +16,6 @@ import options.BaseOptionsMenu;
 import options.Option;
 import openfl.Lib;
 import haxe.io.Path;
-import sys.FileSystem;
-import sys.io.File;
 import mobile.backend.StorageUtil;
 
 class MobileOptionsSubState extends BaseOptionsMenu
