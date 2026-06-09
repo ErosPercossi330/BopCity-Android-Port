@@ -460,14 +460,77 @@ import lime.math.Vector2;
 		dispose() or because the underlying rendering hardware has been lost.
 		@throws	Error	3768: The Stage3D API may not be used during background execution.
 	**/
-	@:noCompletion private inline function __clear(maskColors:Bool = true, maskDepth:Bool = true, maskStencil:Bool = true):Void
+	@:noCompletion private function __clear(useScissor:Bool, red:Float = 0, green:Float = 0, blue:Float = 0, alpha:Float = 1, depth:Float = 1, stencil:UInt = 0, mask:UInt = 7):Void
     {
-        var clearMask:UInt = 0;
-        if (maskColors) clearMask |= 1;
-        if (maskDepth) clearMask |= 2;
-        if (maskStencil) clearMask |= 4;
+        __flushGLFramebuffer();
+        __flushGLViewport();
 
-        clear(0, 0, 0, 1, 1, 0, clearMask);
+        var clearMask = 0;
+
+        if (mask & 1 != 0)
+        {
+            if (__state.renderToTexture == null)
+            {
+                if (__stage.context3D == this && !__stage.__renderer.__cleared) __stage.__renderer.__cleared = true;
+                __cleared = true;
+            }
+
+            clearMask |= gl.COLOR_BUFFER_BIT;
+
+            if (#if openfl_disable_context_cache true #else __contextState.colorMaskRed != true
+                || __contextState.colorMaskGreen != true
+                || __contextState.colorMaskBlue != true
+                || __contextState.colorMaskAlpha != true #end)
+            {
+                gl.colorMask(true, true, true, true);
+                __contextState.colorMaskRed = true;
+                __contextState.colorMaskGreen = true;
+                __contextState.colorMaskBlue = true;
+                __contextState.colorMaskAlpha = true;
+            }
+
+            gl.clearColor(red, green, blue, alpha);
+        }
+
+        if (mask & 2 != 0)
+        {
+            clearMask |= gl.DEPTH_BUFFER_BIT;
+
+            if (#if openfl_disable_context_cache true #else __contextState.depthMask != true #end)
+            {
+                gl.depthMask(true);
+                __contextState.depthMask = true;
+            }
+
+            gl.clearDepth(depth);
+        }
+
+        if (mask & 4 != 0)
+        {
+            clearMask |= gl.STENCIL_BUFFER_BIT;
+
+            if (#if openfl_disable_context_cache true #else __contextState.stencilWriteMask != 0xFF #end)
+            {
+                gl.stencilMask(0xFF);
+                __contextState.stencilWriteMask = 0xFF;
+            }
+
+            gl.clearStencil(stencil);
+            __contextState.stencilWriteMask = 0xFF;
+        }
+
+        if (clearMask == 0) return;
+
+        if (useScissor)
+        {
+            __flushGLScissor();
+        }
+        else
+        {
+            __setGLScissorTest(false);
+        }
+
+        gl.clear(clearMask);
     }
 	public function clear(red:Float = 0, green:Float = 0, blue:Float = 0, alpha:Float = 1, depth:Float = 1, stencil:UInt = 0,
 			mask:UInt = Context3DClearMask.ALL):Void
