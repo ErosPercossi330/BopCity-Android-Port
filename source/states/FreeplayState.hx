@@ -10,6 +10,11 @@ import objects.MusicPlayer;
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 import flixel.math.FlxMath;
 
 class FreeplayState extends MusicBeatState

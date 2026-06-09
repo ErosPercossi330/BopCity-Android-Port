@@ -3,6 +3,12 @@ package objects;
 import openfl.utils.Assets;
 import haxe.Json;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
+
 typedef MenuCharacterFile = {
 	var image:String;
 	var scale:Float;

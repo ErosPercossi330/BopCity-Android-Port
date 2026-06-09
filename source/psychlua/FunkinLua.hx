@@ -41,6 +41,11 @@ import psychlua.ModchartSprite;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 #if mobile
 import mobile.psychlua.Functions;
 #end

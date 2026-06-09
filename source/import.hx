@@ -17,8 +17,6 @@ import backend.Achievements;
 #if sys
 import funk.PsychFile as File;
 import funk.PsychFileSystem as FileSystem;
-#elseif js
-import js.html.*;
 #end
 
 #if VIDEOS_ALLOWED

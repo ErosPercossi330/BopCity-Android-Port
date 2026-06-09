@@ -76,13 +76,22 @@ class PsychFileSystem {
 	}
 
 	public static function isDirectory(path:String):Bool {
-		#if sys
-		if (FileSystem.exists(cwd(path)) && FileSystem.isDirectory(cwd(path)))
-			return true;
-		#end
-		return false;
-		//return Assets.list().exists(f -> f.startsWith(path) && f != path);
-	}
+        #if sys
+        if (FileSystem.exists(cwd(path)) && FileSystem.isDirectory(cwd(path)))
+            return true;
+        #end
+        
+        var cleanPath:String = path;
+        if (!cleanPath.endsWith('/')) cleanPath += '/';
+        
+        for (file in Assets.list()) {
+            if (file.startsWith(cleanPath) && file != cleanPath) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
 	public static function createDirectory(path:String):Void {
 		#if sys

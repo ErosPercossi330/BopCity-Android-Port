@@ -15,6 +15,11 @@ import objects.AttachedSprite;
 import options.ModSettingsSubState;
 import flixel.addons.transition.FlxTransitionableState;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 class ModsMenuState extends MusicBeatState
 {
 	var bg:FlxSprite;
@@ -859,10 +864,14 @@ class ModItem extends FlxSpriteGroup
 		add(text);
 
 		var isPixel = false;
-		var bmp = Paths.cacheBitmap(Paths.mods('$folder/pack.png'));
+		var bmp = #desktop Paths.cacheBitmap(Paths.mods('$folder/pack.png')) #else Paths.cacheBitmap(Paths.mods('$folder/pack.astc')) #end ;
 		if(bmp == null)
 		{
+			#if desktop
 			bmp = Paths.cacheBitmap(Paths.mods('$folder/pack-pixel.png'));
+			#else
+			bmp = Paths.cacheBitmap(Paths.mods('$folder/pack-pixel.astc'));
+			#end
 			isPixel = true;
 		}
 

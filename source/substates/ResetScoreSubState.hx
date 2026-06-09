@@ -6,6 +6,11 @@ import backend.Highscore;
 import flixel.FlxSubState;
 import objects.HealthIcon;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 class ResetScoreSubState extends MusicBeatSubstate
 {
 	var bg:FlxSprite;

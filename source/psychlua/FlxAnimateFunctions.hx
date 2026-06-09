@@ -2,6 +2,11 @@ package psychlua;
 
 import openfl.utils.Assets;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 #if (LUA_ALLOWED && flxanimate)
 class FlxAnimateFunctions
 {

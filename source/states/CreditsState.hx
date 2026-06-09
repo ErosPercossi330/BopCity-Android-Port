@@ -2,6 +2,11 @@ package states;
 
 import objects.AttachedSprite;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 class CreditsState extends MusicBeatState
 {
 	var curSelected:Int = -1;
@@ -74,6 +79,8 @@ class CreditsState extends MusicBeatState
 					var fileName = 'credits/' + creditsStuff[i][1];
 					if (Paths.fileExists('images/$fileName.png', IMAGE)) str = fileName;
 					else if (Paths.fileExists('images/$fileName-pixel.png', IMAGE)) str = fileName + '-pixel';
+					else if (Paths.fileExists('images/$fileName.astc', BINARY)) str = fileName;
+					else if (Paths.fileExists('images/$fileName-pixel.astc', BINARY)) str = fileName + '-pixel';
 				}
 
 				var icon:AttachedSprite = new AttachedSprite(str);

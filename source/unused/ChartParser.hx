@@ -9,7 +9,11 @@ class ChartParser
 		var IMG_WIDTH:Int = 8;
 		var regex:EReg = new EReg("[ \t]*((\r\n)|\r|\n)[ \t]*", "g");
 
+		#if desktop
 		var csvData = FlxStringUtil.imageToCSV(Paths.file('data/' + songName + '/' + songName + '_section' + section + '.png'));
+		#else
+		var csvData = FlxStringUtil.imageToCSV(Paths.file('data/' + songName + '/' + songName + '_section' + section + '.astc'));
+		#end
 
 		var lines:Array<String> = regex.split(csvData);
 		var rows:Array<String> = lines.filter(function(line) return line != "");

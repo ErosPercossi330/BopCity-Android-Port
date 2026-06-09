@@ -12,6 +12,11 @@ import lime.utils.AssetManifest;
 
 import backend.StageData;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 import haxe.io.Path;
 
 class LoadingState extends MusicBeatState
@@ -45,7 +50,11 @@ class LoadingState extends MusicBeatState
 		var bg:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xffcaff4d);
 		bg.antialiasing = ClientPrefs.data.antialiasing;
 		add(bg);
+		#if desktop
 		funkay = new FlxSprite(0, 0).loadGraphic(Paths.getPath('images/funkay.png', IMAGE));
+		#else
+		funkay = new FlxSprite(0, 0).loadGraphic(Paths.getPath('images/funkay.astc', BINARY));
+		#end
 		funkay.setGraphicSize(0, FlxG.height);
 		funkay.updateHitbox();
 		add(funkay);

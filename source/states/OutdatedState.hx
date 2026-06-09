@@ -1,5 +1,10 @@
 package states;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 class OutdatedState extends MusicBeatState
 {
 	public static var leftState:Bool = false;

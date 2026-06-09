@@ -4,6 +4,11 @@ import flixel.FlxObject;
 import flixel.util.FlxSort;
 import objects.Bar;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 #if ACHIEVEMENTS_ALLOWED
 class AchievementsMenuState extends MusicBeatState
 {
@@ -61,6 +66,11 @@ class AchievementsMenuState extends MusicBeatState
 				#if MODS_ALLOWED Mods.currentModDirectory = option.mod; #end
 				var image:String = 'achievements/' + option.name;
 				if(Paths.fileExists('images/$image-pixel.png', IMAGE))
+				{
+					graphic = Paths.image('$image-pixel');
+					hasAntialias = false;
+				}
+				else if(Paths.fileExists('images/$image-pixel.astc', BINARY))
 				{
 					graphic = Paths.image('$image-pixel');
 					hasAntialias = false;

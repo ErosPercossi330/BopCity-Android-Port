@@ -213,64 +213,63 @@ class Paths
 
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
 	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxGraphic
-	{
-		var bitmap:BitmapData = null;
-		var file:String = null;
+    {
+        var bitmap:BitmapData = null;
+        var file:String = null;
+        
+        var cacheKey:String = (library != null ? '$library:' : '') + 'images/$key';
 
-		#if MODS_ALLOWED
-		file = modsImages(key);
-		if (currentTrackedAssets.exists(file))
-		{
-			localTrackedAssets.push(file);
-			return currentTrackedAssets.get(file);
-		}
-		else if (FileSystem.exists(file))
-			bitmap = BitmapData.fromFile(file);
-		else
-		#end
-		{
-			file = getPath('images/$key.astc', BINARY, library);
-			if (currentTrackedAssets.exists(file))
-			{
-				localTrackedAssets.push(file);
-				return currentTrackedAssets.get(file);
-			}
-			else if (OpenFlAssets.exists(file, BINARY))
-				bitmap = OpenFlAssets.getBitmapData(file);
-			else
-			{
-				file = getPath('images/$key.png', IMAGE, library);
-				if (currentTrackedAssets.exists(file))
-				{
-					localTrackedAssets.push(file);
-					return currentTrackedAssets.get(file);
-				}
-				else if (OpenFlAssets.exists(file, IMAGE))
-					bitmap = OpenFlAssets.getBitmapData(file);
-			}
-		}
+        #if MODS_ALLOWED
+        file = modsImages(key);
+        if (currentTrackedAssets.exists(file))
+        {
+            localTrackedAssets.push(file);
+            return currentTrackedAssets.get(file);
+        }
+        else if (FileSystem.exists(file))
+            bitmap = BitmapData.fromFile(file);
+        else
+        #end
+        {
+            file = getPath('images/$key.astc', BINARY, library);
+            if (OpenFlAssets.exists(file, BINARY))
+            {
+                if (currentTrackedAssets.exists(cacheKey))
+                {
+                    localTrackedAssets.push(cacheKey);
+                    return currentTrackedAssets.get(cacheKey);
+                }
+                bitmap = OpenFlAssets.getBitmapData(file);
+                file = cacheKey;
+            }
+            else
+            {
+                file = getPath('images/$key.png', IMAGE, library);
+                if (currentTrackedAssets.exists(cacheKey))
+                {
+                    localTrackedAssets.push(cacheKey);
+                    return currentTrackedAssets.get(cacheKey);
+                }
+                else if (OpenFlAssets.exists(file, IMAGE))
+                {
+                    bitmap = OpenFlAssets.getBitmapData(file);
+                    file = cacheKey;
+                }
+            }
+        }
 
-		if (bitmap != null)
-		{
-			localTrackedAssets.push(file);
-			// if (allowGPU /*&& ClientPrefs.data.cacheOnGPU*/)
-			// {
-			// 	var texture:RectangleTexture = FlxG.stage.context3D.createRectangleTexture(bitmap.width, bitmap.height, BGRA, true);
-			// 	texture.uploadFromBitmapData(bitmap);
-			// 	bitmap.image.data = null;
-			// 	bitmap.dispose();
-			// 	bitmap.disposeImage();
-			// 	bitmap = BitmapData.fromTexture(texture);
-			// }
-			var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file);
-			newGraphic.persist = true;
-			newGraphic.destroyOnNoUse = false;
-			currentTrackedAssets.set(file, newGraphic);
-			return newGraphic;
-		}
+        if (bitmap != null)
+        {
+            localTrackedAssets.push(file);
+            var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file);
+            newGraphic.persist = true;
+            newGraphic.destroyOnNoUse = false;
+            currentTrackedAssets.set(file, newGraphic);
+            return newGraphic;
+        }
 
-		trace('Paths.image(): oh no its returning null NOOOO ($file)');
-		return null;
+        trace('Paths.image(): returning null on file lookup reference ($cacheKey)');
+        return null;
 	}
 
 	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = true)
@@ -513,7 +512,7 @@ class Paths
 
 	#if MODS_ALLOWED
 	inline static public function mods(key:String = '') {
-		return #if mobile Sys.getCwd() + #end 'mods/' + key;
+		return 'mods/' + key;
 	}
 
 	inline static public function modsFont(key:String) {
@@ -572,7 +571,7 @@ class Paths
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
 		}
-		return #if mobile Sys.getCwd() + #end 'mods/' + key;
+		return 'mods/' + key;
 	}
 	#end
 
@@ -656,6 +655,8 @@ class Paths
 			for (i in 0...10)
 			{
 				var st:String = '$i';
+				var astcExist = Paths.fileExists('images/$originalPath/spritemap$st.astc', BINARY);
+				var pngExist = Paths.fileExists('images/$originalPath/spritemap$st.png', IMAGE);
 				if(i == 0) st = '';
 
 				if(!changedAtlasJson)
@@ -669,7 +670,7 @@ class Paths
 						break;
 					}
 				}
-				else if(Paths.fileExists('images/$originalPath/spritemap$st.png', IMAGE))
+				else if (astcExist || pngExist)
 				{
 					changedImage = true;
 					folderOrImg = Paths.image('$originalPath/spritemap$st');

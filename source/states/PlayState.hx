@@ -52,6 +52,11 @@ import psychlua.LuaUtils;
 import psychlua.HScript;
 #end
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 #if SScript
 import tea.SScript;
 #end

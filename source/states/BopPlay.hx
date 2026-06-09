@@ -5,7 +5,10 @@ import backend.Song;
 import backend.Highscore;
 import backend.WeekData;
 
-
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
 
 class BopPlay extends MusicBeatState
 {

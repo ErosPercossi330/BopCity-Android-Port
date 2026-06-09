@@ -3,6 +3,11 @@ package options;
 import states.MainMenuState;
 import backend.StageData;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 class OptionsState extends MusicBeatState
 {
 	var options:Array<String> = ['Note Colors', #if TOUCH_CONTROLS 'Mobile Controls' #else 'Controls' #end, 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay'#if TOUCH_CONTROLS, 'Mobile Options'#end ];

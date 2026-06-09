@@ -6,6 +6,11 @@ import flixel.effects.FlxFlicker;
 import lime.app.Application;
 import flixel.addons.transition.FlxTransitionableState;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 class FlashingState extends MusicBeatState
 {
 	public static var leftState:Bool = false;

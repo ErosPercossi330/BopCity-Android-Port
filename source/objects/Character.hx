@@ -13,6 +13,11 @@ import backend.Song;
 import backend.Section;
 import states.stages.objects.TankmenBG;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 typedef CharacterFile = {
 	var animations:Array<AnimArray>;
 	var image:String;

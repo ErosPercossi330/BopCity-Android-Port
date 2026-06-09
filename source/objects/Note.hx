@@ -345,6 +345,11 @@ class Note extends FlxSprite
 			skin = customSkin;
 			_lastValidChecked = customSkin;
 		}
+		else if(customSkin == _lastValidChecked || Paths.fileExists('images/' + path + customSkin + '.astc', BINARY))
+		{
+			skin = customSkin;
+			_lastValidChecked = customSkin;
+		}
 		else skinPostfix = '';
 
 		if(PlayState.isPixelStage) {

@@ -14,6 +14,11 @@ import flixel.addons.nape.FlxNapeSpace;
 import objects.BoyfriendRagdoll;
 import backend.WeekData;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 import objects.Character;
 import flixel.FlxObject;
 import flixel.FlxSubState;

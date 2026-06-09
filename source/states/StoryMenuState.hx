@@ -10,6 +10,11 @@ import flixel.graphics.FlxGraphic;
 import objects.MenuItem;
 import objects.MenuCharacter;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 

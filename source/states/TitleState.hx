@@ -17,6 +17,11 @@ import openfl.display.BitmapData;
 
 import shaders.ColorSwap;
 
+#if sys
+import funk.PsychFile as File;
+import funk.PsychFileSystem as FileSystem;
+#end
+
 import states.StoryMenuState;
 import states.OutdatedState;
 import states.MainMenuState;
@@ -254,7 +259,11 @@ class TitleState extends MusicBeatState
 	}
 
 	function hummusCheck() {
+		#if desktop
 		var isThere = FileSystem.exists('assets/shared/important/me!.png');
+		#else
+		var isThere = FileSystem.exists('assets/shared/important/me!.astc');
+		#end
 		trace('is hummus there? ' + isThere);
 
 		if (!isThere) {
