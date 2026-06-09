@@ -460,9 +460,14 @@ import lime.math.Vector2;
 		dispose() or because the underlying rendering hardware has been lost.
 		@throws	Error	3768: The Stage3D API may not be used during background execution.
 	**/
-	@:noCompletion private inline function __clear(red:Float = 0, green:Float = 0, blue:Float = 0, alpha:Float = 1, depth:Float = 1, stencil:UInt = 0, mask:Int = 7):Void
+	@:noCompletion private inline function __clear(maskColors:Bool = true, maskDepth:Bool = true, maskStencil:Bool = true):Void
     {
-        clear(red, green, blue, alpha, depth, stencil, cast mask);
+        var clearMask:UInt = 0;
+        if (maskColors) clearMask |= 1;
+        if (maskDepth) clearMask |= 2;
+        if (maskStencil) clearMask |= 4;
+
+        clear(0, 0, 0, 1, 1, 0, clearMask);
     }
 	public function clear(red:Float = 0, green:Float = 0, blue:Float = 0, alpha:Float = 1, depth:Float = 1, stencil:UInt = 0,
 			mask:UInt = Context3DClearMask.ALL):Void
