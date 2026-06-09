@@ -32,9 +32,13 @@ def get_all_target_directories():
             if os.path.isdir(item_path) and item.lower().startswith("week"):
                 targets.append(item_path)
             
-    # 3. Automatically find all individual mod folders (Paul, mr Dweller, silly singles, etc.)
+    # 3. Handle Mod Root Folders and their internal structures
     for mod_root in MOD_ROOT_DIRS:
         if os.path.exists(mod_root):
+            # NEW: Add the root folder itself (e.g., "example_mods") to check for direct images/images-png
+            targets.append(mod_root)
+            
+            # Keep scanning individual sub-mod folders (Paul, mr Dweller, silly singles, etc.)
             for item in os.listdir(mod_root):
                 item_path = os.path.join(mod_root, item)
                 if os.path.isdir(item_path):
